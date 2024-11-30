@@ -104,7 +104,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .css-bm8k05-MuiGrid-root,
-.muirtl-bm8k05-MuiGrid-root {
+.muirtl-bm8k05-MuiGrid-root,
+.css-1jjp2xs {
   max-width: 100% !important;
 }
 
@@ -166,6 +167,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .css-1rjprb5-MuiCardContent-root,
-.muirtl-1rjprb5-MuiCardContent-root {
+.muirtl-1rjprb5-MuiCardContent-root,
+.css-1jkrwd1 {
   border: none !important;
 }
