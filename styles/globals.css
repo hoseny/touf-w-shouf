@@ -1,0 +1,171 @@
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  src: local(''),
+    url('../assets/fonts/montserrat-v25-latin-600.woff') format('woff');
+  /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+    url('../assets/fonts/montserrat-v25-latin-regular.woff') format('woff');
+  /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+    url('../assets/fonts/montserrat-v25-latin-700.woff') format('woff');
+  /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 500;
+  src: local(''), url('../assets/fonts/Cairo-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''), url('../assets/fonts/Cairo-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''), url('../assets/fonts/Cairo-Bold.woff') format('woff');
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.toast-orange {
+  background-color: #e97c34;
+  color: white;
+}
+
+.toast-orange .Toastify__progress-bar {
+  background-color: white;
+}
+
+.toast-orange .Toastify__close-button {
+  color: white;
+}
+
+.toast-orange .Toastify__toast-icon {
+  display: none !important;
+}
+
+.border-danger {
+  border: 2px solid #e97c34 !important;
+}
+
+.reservation-card {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.171);
+  border: none !important;
+  border-radius: 5px;
+  height: 100%;
+}
+
+.css-19kzrtu {
+  padding: 0 !important;
+}
+
+.css-bm8k05-MuiGrid-root,
+.muirtl-bm8k05-MuiGrid-root {
+  max-width: 100% !important;
+}
+
+@media(max-width:567px) {
+  .reservation-img-box {
+    height: 220px !important;
+  }
+
+  .css-llfh9y-MuiPaper-root-MuiAccordion-root:first-of-type,
+  .css-llfh9y-MuiPaper-root-MuiAccordion-root:last-of-type {
+    width: 350px !important;
+  }
+
+  .css-4skrwt-MuiStack-root>:not(style)~:not(style) {
+    margin-left: 0 !important;
+  }
+
+  .css-yojlqj-MuiStack-root>:not(style)~:not(style) {
+    margin-left: 0 !important;
+    margin-top: 5px !important;
+  }
+
+  .css-yojlqj-MuiStack-root {
+    flex-direction: column !important;
+    align-items: start !important;
+    padding: 15px !important;
+  }
+
+  .css-zow5z4-MuiGrid-root {
+    flex-direction: column !important;
+  }
+
+  .css-uqwprf-MuiGrid-root {
+    max-width: 100% !important;
+  }
+
+  .css-4skrwt-MuiStack-root {
+    flex-direction: column !important;
+    align-items: start !important;
+  }
+}
+
+.react-datepicker {
+  font-family: Arial, sans-serif;
+}
+
+.react-datepicker__header {
+  background-color: #f0f0f0;
+}
+
+.react-datepicker__day--selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+.css-1rjprb5-MuiCardContent-root,
+.muirtl-1rjprb5-MuiCardContent-root {
+  border: none !important;
+}
