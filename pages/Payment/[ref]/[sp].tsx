@@ -40,6 +40,8 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
         }
     }, []);
 
+    const customerName = localStorage.getItem('NAME');
+
     const { data } = useGetPaymentQuery(ref && sp ? { ref, sp } : undefined, {
         skip: !ref || !sp,
     });
@@ -57,8 +59,16 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
     const numberOfAdults = paymentData[0]?.['TheNumberOfADULTX'] || 0;
     const numberOfChildrenUnder6 = paymentData[0]?.['TheNumberOfCHILD FROM 1 TO 6X'] || 0;
     const numberOfChildrenBetween6And12 = paymentData[0]?.['TheNumberOfCHILD FROM 6 TO 12X'] || 0;
+    const TheNumberOfCHILDFROM6TO12DayUseX =
+        paymentData[0]?.['TheNumberOfCHILD FROM 6 TO 12 DayUseX'] || 0;
+    const TheNumberOfADULTINSINGLEX = paymentData[0]?.['TheNumberOfADULT IN SINGLEX'] || 0;
+    const TheNumberOfADULTINDOUBLEX = paymentData[0]?.['TheNumberOfADULT IN DOUBLEX'] || 0;
+    const TheNumberOfADULTINTRIPLEX = paymentData[0]?.['TheNumberOfADULT IN TRIPLEX'] || 0;
+    const TheNumberOfADULTINSUITEX = paymentData[0]?.['TheNumberOfADULT IN SUITEX'] || 0;
+    const TheNumberOfADULTINQUARTERX = paymentData[0]?.['TheNumberOfADULT IN QUARTERX'] || 0;
     const totalWithoutAdditionalService = paymentData[0]?.['TheTotalwithoutadditionalservice'] || 0;
     const totalAdditionalService = paymentData[0]?.['TheTotaladditionalservice'] || 0;
+
     // fetch check out id
     const fetchPaymentData = async (): Promise<any> => {
         try {
@@ -182,24 +192,24 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
                         <Typography variant="h3">{programname}</Typography>
 
                         <Stack sx={{ mt: 3 }} direction="column" spacing={2}>
+                            {/* <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="body2">{t('program year')}:</Typography>
+                                <Typography variant="body1">{programyear}</Typography>
+                            </Stack> */}
+
+                            {/* <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="body2">{t('Customer Ref')}:</Typography>
+                                <Typography variant="body1">{customerRef}</Typography>
+                            </Stack> */}
+
+                            <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="body2">{t('Customer Name')}:</Typography>
+                                <Typography variant="body1">{customerName}</Typography>
+                            </Stack>
+
                             <Stack direction="row" justifyContent="space-between">
                                 <Typography variant="body2">{t('Trip Date')}:</Typography>
                                 <Typography variant="body1">{TripDate}</Typography>
-                            </Stack>
-
-                            <Stack direction="row" justifyContent="space-between">
-                                <Typography variant="body2">{t('program year')}:</Typography>
-                                <Typography variant="body1">{programyear}</Typography>
-                            </Stack>
-
-                            <Stack direction="row" justifyContent="space-between">
-                                <Typography variant="body2">{t('Customer Ref')}:</Typography>
-                                <Typography variant="body1">{customerRef}</Typography>
-                            </Stack>
-
-                            <Stack direction="row" justifyContent="space-between">
-                                <Typography variant="body2">{t('Reservation Ref')}:</Typography>
-                                <Typography variant="body1">{reservationRef}</Typography>
                             </Stack>
 
                             <Stack direction="row" justifyContent="space-between">
@@ -207,26 +217,100 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
                                 <Typography variant="body1">{reservationsp}</Typography>
                             </Stack>
 
-                            <Stack direction="row" justifyContent="space-between">
-                                <Typography variant="body2">{t('Number of Adult')}:</Typography>
-                                <Typography variant="body1">{numberOfAdults}</Typography>
-                            </Stack>
+                            {numberOfAdults > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">{t('Number of Adult')}:</Typography>
+                                    <Typography variant="body1">{numberOfAdults}</Typography>
+                                </Stack>
+                            )}
 
-                            <Stack direction="row" justifyContent="space-between">
-                                <Typography variant="body2">
-                                    {t('Number of Children (1-6)')}:
-                                </Typography>
-                                <Typography variant="body1">{numberOfChildrenUnder6}</Typography>
-                            </Stack>
+                            {TheNumberOfADULTINSINGLEX > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number of Adult Single')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {TheNumberOfADULTINSINGLEX}
+                                    </Typography>
+                                </Stack>
+                            )}
 
-                            <Stack direction="row" justifyContent="space-between">
-                                <Typography variant="body2">
-                                    {t('Number of Children (6-12)')}:
-                                </Typography>
-                                <Typography variant="body1">
-                                    {numberOfChildrenBetween6And12}
-                                </Typography>
-                            </Stack>
+                            {TheNumberOfADULTINDOUBLEX > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number of Adult Double')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {TheNumberOfADULTINDOUBLEX}
+                                    </Typography>
+                                </Stack>
+                            )}
+
+                            {TheNumberOfADULTINTRIPLEX > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number of Adult in Triple')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {TheNumberOfADULTINTRIPLEX}
+                                    </Typography>
+                                </Stack>
+                            )}
+
+                            {TheNumberOfADULTINQUARTERX > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number of Adult in Quarter')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {TheNumberOfADULTINQUARTERX}
+                                    </Typography>
+                                </Stack>
+                            )}
+
+                            {TheNumberOfADULTINSUITEX > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number of Adult in Suite')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {TheNumberOfADULTINSUITEX}
+                                    </Typography>
+                                </Stack>
+                            )}
+
+                            {TheNumberOfCHILDFROM6TO12DayUseX > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number Of CHILD (6 TO 12) DayUse')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {TheNumberOfCHILDFROM6TO12DayUseX}
+                                    </Typography>
+                                </Stack>
+                            )}
+
+                            {numberOfChildrenUnder6 > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number of Children (1-6)')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {numberOfChildrenUnder6}
+                                    </Typography>
+                                </Stack>
+                            )}
+
+                            {numberOfChildrenBetween6And12 > 0 && (
+                                <Stack direction="row" justifyContent="space-between">
+                                    <Typography variant="body2">
+                                        {t('Number of Children (6-12)')}:
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {numberOfChildrenBetween6And12}
+                                    </Typography>
+                                </Stack>
+                            )}
 
                             <Stack direction="row" justifyContent="space-between">
                                 <Typography variant="body2">

@@ -64,10 +64,12 @@ const Navbar: FunctionComponent<Props> = props => {
                                     spacing={6}
                                     justifyContent="space-between"
                                 >
+                                    <Link href={'/'}>{t('Home')}</Link>
                                     <Link href={'/myReservation'}>{t('My Reservations')}</Link>
-                                    <Link href={''}>{t('Offers')}</Link>
-                                    <Link href={''}>{t('Contact Us')}</Link>
-                                    <Link href={''}>{t('Complaint and Suggestion')}</Link>
+                                    <Link href={'/ContactUs'}>{t('Contact Us')}</Link>
+                                    <Link href={'/Suggestion'}>
+                                        {t('Complaint and Suggestion')}
+                                    </Link>
                                     <Stack
                                         direction="row"
                                         alignItems="center"
@@ -80,7 +82,7 @@ const Navbar: FunctionComponent<Props> = props => {
                                         >
                                             <ShoppingBagIcon />
                                         </IconButton>
-                                        <SearchModal />
+                                        {/* <SearchModal /> */}
                                     </Stack>
                                 </Stack>
                             </Grid>

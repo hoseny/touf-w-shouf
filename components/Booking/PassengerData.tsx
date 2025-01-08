@@ -219,14 +219,35 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                         let paxType: string;
 
                         switch (paxData.pax_type) {
-                            case 'CHILD FROM 1 TO 6':
+                            case 'CHILD FROM 1 TO 6 DayUse':
                                 paxType = 'CH1';
                                 break;
-                            case 'CHILD FROM 6 TO 12':
+                            case 'CHILD FROM 1 TO 6 Packages':
+                                paxType = 'CH-1';
+                                break;
+                            case 'CHILD FROM 6 TO 12 DayUse':
                                 paxType = 'CH2';
+                                break;
+                            case 'CHILD FROM 6 TO 12 Packages':
+                                paxType = 'CH-2';
                                 break;
                             case 'ADULT':
                                 paxType = 'A';
+                                break;
+                            case 'ADULT IN SINGLE':
+                                paxType = 'A_S';
+                                break;
+                            case 'ADULT IN DOUBLE':
+                                paxType = 'A_D';
+                                break;
+                            case 'ADULT IN TRIPLE':
+                                paxType = 'A_T';
+                                break;
+                            case 'ADULT IN SUITE':
+                                paxType = 'A_U';
+                                break;
+                            case 'ADULT IN QUARTER':
+                                paxType = 'A_Q';
                                 break;
                             default:
                                 console.error(`Unknown pax type: ${paxData.pax_type}`);
@@ -307,38 +328,25 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
             setLoading(false);
         }
     };
-    const hasSelectedServices = Object.values(selectedServices).some(count => count > 0);
 
     const handlePayButtonClick = (
         selectedServices: { [key: string]: number },
         handlePayment: (services: { [key: string]: number }) => void
     ) => {
-        if (Object.values(selectedServices).some(count => count > 0)) {
-            Swal.fire({
-                title: 'Choose Booking Type',
-                text: 'Do you want to create a new booking or view Existing bookings?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'New Book',
-                cancelButtonText: 'Existing Book',
-                confirmButtonColor: '#4CAF50',
-                cancelButtonColor: '#E07026',
-            }).then(result => {
-                if (result.isConfirmed) {
-                    handlePayment(selectedServices);
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    router.push('/myReservation');
-                }
-            });
-        } else {
+        const hasSelectedServices = Object.values(selectedServices).some(count => count > 0);
+
+        if (!hasSelectedServices) {
             Swal.fire({
                 icon: 'error',
                 title: 'Payment Error',
                 text: 'Please select at least one adult or child.',
                 confirmButtonColor: '#E07026',
             });
+        } else {
+            handlePayment(selectedServices);
         }
     };
+
     return (
         <Box sx={{ mt: 5 }}>
             <ToastContainer />
