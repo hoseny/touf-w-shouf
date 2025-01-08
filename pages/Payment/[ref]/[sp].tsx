@@ -29,6 +29,7 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
     const [sp, setSp] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const customer_ref = typeof window !== 'undefined' ? localStorage.getItem('custcode') : null;
+    const customerName = typeof window !== 'undefined' ? localStorage.getItem('NAME') : null;
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -39,8 +40,6 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
             if (resSp) setSp(resSp);
         }
     }, []);
-
-    const customerName = localStorage.getItem('NAME');
 
     const { data } = useGetPaymentQuery(ref && sp ? { ref, sp } : undefined, {
         skip: !ref || !sp,
