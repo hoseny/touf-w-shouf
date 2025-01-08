@@ -56,7 +56,8 @@ const Home: NextPage = () => {
             </Head>
             <ContactDial />
             <Box>
-                <HomePageVideo />
+                {/* <HomePageVideo /> */}
+                <Carousel />
                 <Filter />
             </Box>
             <Container maxWidth="lg">
