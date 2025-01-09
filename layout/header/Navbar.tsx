@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import Logo from '@/assets/images/logo_en.webp';
+import Misr from '@/assets/images/misr-tour.jpg';
 import Link from 'next/link';
 import SearchModal from '@/components/ui/SearchModal';
 
@@ -52,9 +53,9 @@ const Navbar: FunctionComponent<Props> = props => {
                             alignItems="center"
                             sx={{ py: 1 }}
                         >
-                            <Grid item xs={3} sx={{ pl: '0px !important' }}>
+                            <Grid item xs={2} sx={{ pl: '0px !important' }}>
                                 <Box onClick={() => router.push('/')} sx={{ cursor: 'pointer' }}>
-                                    <Image src={Logo} alt="logo" priority layout="intrinsic" />
+                                    <Image src={Misr} alt="logo" priority layout="intrinsic" />
                                 </Box>
                             </Grid>
                             <Grid item xs={9} sx={{ pl: '0px !important' }}>
@@ -84,6 +85,19 @@ const Navbar: FunctionComponent<Props> = props => {
                                         </IconButton>
                                         {/* <SearchModal /> */}
                                     </Stack>
+                                    <Grid item xs={2} sx={{ pl: '0px !important' }}>
+                                        <Box
+                                            onClick={() => router.push('/')}
+                                            sx={{ cursor: 'pointer' }}
+                                        >
+                                            <Image
+                                                src={Logo}
+                                                alt="logo"
+                                                priority
+                                                layout="intrinsic"
+                                            />
+                                        </Box>
+                                    </Grid>
                                 </Stack>
                             </Grid>
                         </Grid>
