@@ -7,6 +7,7 @@ import { ClientStorage } from '@/hooks/useLocalStroge';
 import { useTranslation } from 'react-i18next';
 import ReservationItem from './Reservation';
 import { useGetUnPaidReservationQuery } from '@/store/Reservation/FetchUnPaidReservation';
+import { useGetInvoiceQuery } from '@/store/Reservation/FetchInvoiceById';
 
 interface Reservation {
     CustomerID: number;
@@ -32,6 +33,12 @@ const UnpaidReservation = () => {
 
     const { data, isLoading, error } = useGetUnPaidReservationQuery(custcode);
     const reservations = data?.CustomerPayment || [];
+
+    const id = reservations.ReservationNo;
+    console.log(id);
+
+    const { data: invoice } = useGetInvoiceQuery({ id });
+    const invoices = invoice?.items?.[0];
 
     if (isLoading) return <Loading />;
     if (error) return <Typography>{t('Error fetching data')}</Typography>;

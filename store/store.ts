@@ -41,6 +41,7 @@ import { FetchCityEnApi } from './Filter/FetchCityEnApi';
 import { FetchCityArApi } from './Filter/FetchCityArApi';
 import { FetchTourTypeArApi } from './Filter/FetchTourTypeArApi';
 import { FetchUnPaidReservation } from './Reservation/FetchUnPaidReservation';
+import { FetchInvoiceById } from './Reservation/FetchInvoiceById';
 
 export const store = configureStore({
     reducer: {
@@ -86,6 +87,7 @@ export const store = configureStore({
         [FetchCityEnApi.reducerPath]: FetchCityEnApi.reducer,
         [FetchCityArApi.reducerPath]: FetchCityArApi.reducer,
         [FetchTourTypeArApi.reducerPath]: FetchTourTypeArApi.reducer,
+        [FetchInvoiceById.reducerPath]: FetchInvoiceById.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware()
@@ -128,6 +130,7 @@ export const store = configureStore({
             .concat(FetchCityArApi.middleware)
             .concat(FetchTourTypeArApi.middleware)
             .concat(FetchUnPaidReservation.middleware)
+            .concat(FetchInvoiceById.middleware)
 });
 
 export type AppDispatch = typeof store.dispatch;

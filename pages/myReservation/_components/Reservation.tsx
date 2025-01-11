@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -7,9 +7,11 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import Image from 'next/image';
-import Img from '@/assets/images/logo_en.webp';
 import { useTranslation } from 'react-i18next';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 interface Props {
     customerName: string;
     tripDate: string;
@@ -40,13 +42,17 @@ const ReservationItem: FunctionComponent<Props> = ({
     };
     const { t } = useTranslation();
 
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleDialogOpen = () => setOpenDialog(true);
+    const handleDialogClose = () => setOpenDialog(false);
+
     return (
         <div style={{ height: '100%' }}>
             <div className="container" style={{ height: '100%' }}>
                 <div className="row" style={{ height: '100%' }}>
                     <div className="col-md-12 card reservation-card p-3">
                         <div className="row" style={{ height: '100%' }}>
-                            {/* الصورة */}
                             <div
                                 className="col-12 col-lg-6"
                                 style={{
@@ -57,11 +63,7 @@ const ReservationItem: FunctionComponent<Props> = ({
                             >
                                 <div
                                     className="reservation-img-box"
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        position: 'relative',
-                                    }}
+                                    style={{ width: '100%', height: '100%', position: 'relative' }}
                                 >
                                     <Image
                                         src={IMG_Path}
@@ -73,7 +75,6 @@ const ReservationItem: FunctionComponent<Props> = ({
                                 </div>
                             </div>
 
-                            {/* المحتوى */}
                             <div className="col-12 col-lg-6 card-body">
                                 <Typography variant="body1">
                                     <span style={labelStyle}>{t('Customer Name')} : </span>
@@ -134,8 +135,15 @@ const ReservationItem: FunctionComponent<Props> = ({
                                         size="small"
                                         variant="contained"
                                         color="secondary"
+                                        onClick={handleDialogOpen}
                                     >
-                                        {t('Print')}
+                                        {t(
+                                            PayMentStatus === 'Paid'
+                                                ? 'Print Invoice'
+                                                : PayMentStatus === 'Unpaid'
+                                                ? 'Print Pre Invoice'
+                                                : 'Print'
+                                        )}
                                     </Button>
 
                                     {PayMentStatus !== 'Paid' && (
@@ -154,6 +162,36 @@ const ReservationItem: FunctionComponent<Props> = ({
                     </div>
                 </div>
             </div>
+
+            {/* Dialog for displaying the data */}
+            <Dialog open={openDialog} onClose={handleDialogClose}>
+                <DialogTitle>{t('Reservation Details')}</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1">
+                        {t('Customer Name')}: {customerName}
+                    </Typography>
+                    <Typography variant="body1">
+                        {t('Program Name')}: {ProgramName}
+                    </Typography>
+                    <Typography variant="body1">
+                        {t('Program Year')}: {PROG_YEAR}
+                    </Typography>
+                    <Typography variant="body1">
+                        {t('Trip Date')}: {new Date(tripDate).toLocaleDateString('en-GB')}
+                    </Typography>
+                    <Typography variant="body1">
+                        {t('Reservation No')}: {reservationNo}
+                    </Typography>
+                    <Typography variant="body1">
+                        {t('Total Price')}: {totalPayment} {Currany}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDialogClose} color="primary">
+                        {t('Close')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

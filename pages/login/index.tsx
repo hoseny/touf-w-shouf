@@ -140,6 +140,7 @@ const Index: NextPage = () => {
                     localStorage.setItem('token', token);
                     localStorage.setItem('custcode', CustCode);
                     localStorage.setItem('NAME', NAME);
+                    localStorage.setItem('EMAIL', EMAIL);
                     localStorage.setItem('TELEPHONE', TELEPHONE);
                     localStorage.setItem('isAuthenticated', 'true');
 

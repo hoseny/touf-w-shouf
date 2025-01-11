@@ -33,7 +33,10 @@ const ContactUs = () => {
 
             <Container maxWidth="lg">
                 <Grid container>
-                    <Grid item xs={7} className="mb-3 mt-5 m-auto">
+                    <Grid item xs={7} className="my-5 m-auto">
+                        <h2 className="text-center fw-bold">{t('Have Questions? Contact Us')}</h2>
+                    </Grid>
+                    <Grid item xs={7} className="mb-3 m-auto">
                         <label htmlFor="name">
                             <Typography variant="subtitle1">{t('Your Name')}</Typography>
                         </label>
