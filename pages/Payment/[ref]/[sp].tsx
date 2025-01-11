@@ -74,9 +74,9 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
             setIsLoading(true);
             // const urlFalse = 'https://touf-wshouf-murex.vercel.app/Payment/Failed';
             // const urlTrue = 'https://touf-wshouf-murex.vercel.app/Payment/Success';
-            const urlTrue = 'http://localhost:3000/Payment/Success';
+            // const urlTrue = 'http://localhost:3000/Payment/Success';
             const urlFalse = 'https://touf-we-shouf.vercel.app/Payment/Failed';
-            // const urlTrue = 'https://touf-we-shouf.vercel.app/Payment/Success';
+            const urlTrue = 'https://touf-we-shouf.vercel.app/Payment/Success';
             const accessType = 'Web';
             const custRef = customerRef;
             const invNo = reservationsp;
