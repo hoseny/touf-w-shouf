@@ -480,11 +480,11 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                                 {errorMessage}
                             </Typography>
                         )}
-                        <Grid item xs={3}>
+                        {/* <Grid item xs={3}>
                             <Button variant="outlined" sx={{ mr: 1 }} fullWidth size="large">
                                 {t('Add to my shopping cart')}
                             </Button>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </>
             )}

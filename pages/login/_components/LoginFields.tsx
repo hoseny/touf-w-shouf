@@ -98,7 +98,7 @@ const LoginFields: React.FC<LoginProps> = ({
 
                     <Grid item xs={12}>
                         <Stack direction="row" alignItems="center" justifyContent="space-between">
-                            <FormControlLabel
+                            {/* <FormControlLabel
                                 control={
                                     <Checkbox
                                         checked={values.rememberMe}
@@ -108,7 +108,7 @@ const LoginFields: React.FC<LoginProps> = ({
                                 }
                                 label={t('Remember me')}
                                 sx={{ '& .MuiTypography-root': { fontSize: '12px' } }}
-                            />
+                            /> */}
                             <Link href="/ForgetPassword">
                                 <Typography
                                     variant="caption"

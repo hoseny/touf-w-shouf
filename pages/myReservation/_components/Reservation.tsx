@@ -103,8 +103,14 @@ const ReservationItem: FunctionComponent<Props> = ({
                                     variant="body1"
                                     color={PayMentStatus === 'Unpaid' ? 'error' : 'success'}
                                 >
-                                    <span style={labelStyle}>{t('Payment Status')} : </span>
-                                    {t(PayMentStatus)}
+                                    <span style={labelStyle}>{t('Status')} : </span>
+                                    {t(
+                                        PayMentStatus === 'Unpaid'
+                                            ? 'Pre invoice'
+                                            : PayMentStatus === 'Paid'
+                                            ? 'Invoice'
+                                            : PayMentStatus
+                                    )}
                                 </Typography>
 
                                 <Stack
@@ -112,14 +118,16 @@ const ReservationItem: FunctionComponent<Props> = ({
                                     spacing={2}
                                     className="mt-3 d-flex flex-wrap"
                                 >
-                                    <Button
-                                        className="m-1"
-                                        size="small"
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        {t('Edit')}
-                                    </Button>
+                                    {PayMentStatus !== 'Paid' && (
+                                        <Button
+                                            className="m-1"
+                                            size="small"
+                                            variant="contained"
+                                            color="primary"
+                                        >
+                                            {t('Edit')}
+                                        </Button>
+                                    )}
 
                                     <Button
                                         className="m-1"
@@ -130,14 +138,16 @@ const ReservationItem: FunctionComponent<Props> = ({
                                         {t('Print')}
                                     </Button>
 
-                                    <Button
-                                        className="m-1"
-                                        size="small"
-                                        variant="outlined"
-                                        color="error"
-                                    >
-                                        {t('Cancel')}
-                                    </Button>
+                                    {PayMentStatus !== 'Paid' && (
+                                        <Button
+                                            className="m-1"
+                                            size="small"
+                                            variant="outlined"
+                                            color="error"
+                                        >
+                                            {t('Cancel')}
+                                        </Button>
+                                    )}
                                 </Stack>
                             </div>
                         </div>
