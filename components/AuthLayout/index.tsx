@@ -29,17 +29,23 @@ const Index: NextPage<Props> = ({ children }) => {
             <Container maxWidth="lg" sx={{ height: '100%' }}>
                 <Grid
                     container
-                    justifyContent={'space-between'}
-                    sx={{ height: '100%', mt: 'unset' }}
-                    alignItems={'center'}
+                    justifyContent="space-between"
+                    alignItems="center"
                     spacing={6}
+                    sx={{
+                        height: '100%',
+                        mt: 'unset',
+                        flexDirection: { xs: 'column', sm: 'column', md: 'row' },
+                    }}
                 >
                     <Grid
                         item
-                        xs={6.5}
+                        xs={12}
+                        md={6.5}
                         sx={{
                             color: 'body.light',
-                            textAlign: 'center',
+                            textAlign: { xs: 'center', md: 'left' },
+                            mb: { xs: 4, sm: 4, md: 0 },
                         }}
                     >
                         <Typography variant="h2">
@@ -51,7 +57,7 @@ const Index: NextPage<Props> = ({ children }) => {
                             )}
                         </Typography>
                     </Grid>
-                    <Grid item xs={5}>
+                    <Grid item xs={12} md={5}>
                         {children}
                     </Grid>
                 </Grid>

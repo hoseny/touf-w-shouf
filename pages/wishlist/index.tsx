@@ -58,7 +58,7 @@ const Wishlist = () => {
                 </Stack>
             </BackgroundImage>
             <Container maxWidth="lg">
-                <Grid container spacing={5} justifyContent="center" sx={{ p: 5 }}>
+                <Grid container spacing={5} justifyContent="center" sx={{ p: 2 }}>
                     {wishlistItems.length === 0 ? (
                         <Grid item xs={12}>
                             <Typography variant="h6" sx={{ textAlign: 'center' }}>

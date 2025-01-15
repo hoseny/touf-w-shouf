@@ -45,7 +45,6 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
         skip: !ref || !sp,
     });
     const paymentData = data?.items || [];
-
     const programname = paymentData[0]?.programname || t('Program name not available');
     const programyear = paymentData[0]?.programyear || t('Program year not available');
     const TripDate = paymentData[0]?.['TripDate :'] || t('Program date not available');
@@ -72,15 +71,16 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
     const fetchPaymentData = async (): Promise<any> => {
         try {
             setIsLoading(true);
-            // const urlFalse = 'https://touf-wshouf-murex.vercel.app/Payment/Failed';
-            // const urlTrue = 'https://touf-wshouf-murex.vercel.app/Payment/Success';
             // const urlTrue = 'http://localhost:3000/Payment/Success';
-            const urlFalse = 'https://touf-we-shouf.vercel.app/Payment/Failed';
-            const urlTrue = 'https://touf-we-shouf.vercel.app/Payment/Success';
+            // const urlFalse = 'http://localhost:3000/Payment/Failed';
+            // const urlTrue = 'https://touf-we-shouf.vercel.app/Payment/Success';
+            // const urlFalse = 'https://touf-we-shouf.vercel.app/Payment/Failed';
+            const urlTrue = 'https://www.toufwshouf.travel/Payment/Success';
+            const urlFalse = 'https://www.toufwshouf.travel/Payment/Failed';
             const accessType = 'Web';
             const custRef = customerRef;
             const invNo = reservationsp;
-            const invAmount = total;
+            const invAmount = totalWithVat;
             const appSession =
                 typeof window !== 'undefined' ? localStorage.getItem('token') : '123456';
             // const appSession = '123456';
@@ -189,7 +189,7 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
                 {/* <Grid xs={7} item>
                     <PaymentForm />
                 </Grid> */}
-                <Grid xs={5} item sx={{ margin: 'auto' }}>
+                <Grid md={5} xs={12} item sx={{ margin: 'auto' }}>
                     <Paper elevation={1} sx={{ backgroundColor: '#FAFAFA', p: 2, mt: 5 }}>
                         <Typography variant="h3">{programname}</Typography>
 

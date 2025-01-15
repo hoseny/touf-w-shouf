@@ -25,7 +25,7 @@ const ContactUs = () => {
                     justifyContent="center"
                     sx={{ height: '100%' }}
                 >
-                    <Typography variant="h1" sx={{ color: 'body.light' }}>
+                    <Typography variant="h1" textAlign={'center'} sx={{ color: 'body.light' }}>
                         {t('Contact Us')}
                     </Typography>
                 </Stack>
@@ -33,10 +33,10 @@ const ContactUs = () => {
 
             <Container maxWidth="lg">
                 <Grid container>
-                    <Grid item xs={7} className="my-5 m-auto">
+                    <Grid item xs={12} md={7} className="my-5 m-auto">
                         <h2 className="text-center fw-bold">{t('Have Questions? Contact Us')}</h2>
                     </Grid>
-                    <Grid item xs={7} className="mb-3 m-auto">
+                    <Grid item xs={12} md={7} className="mb-3 m-auto">
                         <label htmlFor="name">
                             <Typography variant="subtitle1">{t('Your Name')}</Typography>
                         </label>
@@ -50,7 +50,7 @@ const ContactUs = () => {
                         />
                     </Grid>
 
-                    <Grid item xs={7} className="mb-3 m-auto">
+                    <Grid item xs={12} md={7} className="mb-3 m-auto">
                         <label htmlFor="email">
                             <Typography variant="subtitle1">{t('Your Email')}</Typography>
                         </label>
@@ -64,7 +64,7 @@ const ContactUs = () => {
                         />
                     </Grid>
 
-                    <Grid item xs={7} className="mb-3 m-auto">
+                    <Grid item xs={12} md={7} className="mb-3 m-auto">
                         <label htmlFor="Phone">
                             <Typography variant="subtitle1">{t('Your Phone')}</Typography>
                         </label>
@@ -78,7 +78,7 @@ const ContactUs = () => {
                         />
                     </Grid>
 
-                    <Grid item xs={7} className="mb-3 m-auto">
+                    <Grid item xs={12} md={7} className="mb-3 m-auto">
                         <label htmlFor="message">
                             <Typography variant="subtitle1">{t('Your Message')}</Typography>
                         </label>

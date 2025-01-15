@@ -73,8 +73,19 @@ const Topbar: FunctionComponent = () => {
                     >
                         <Grid item xs={6} sx={{ pl: 'unset !important' }}>
                             <Stack direction="row" alignItems="center" spacing={1}>
-                                <CallIcon />
-                                <Typography variant="h3">19341</Typography>
+                                <CallIcon
+                                    sx={{
+                                        fontSize: { xs: '20px', sm: '30px' },
+                                    }}
+                                />
+                                <Typography
+                                    variant="h3"
+                                    sx={{
+                                        fontSize: { xs: '20px', sm: '30px' },
+                                    }}
+                                >
+                                    19341
+                                </Typography>
                             </Stack>
                         </Grid>
                         <Grid item xs={6}>
@@ -84,7 +95,7 @@ const Topbar: FunctionComponent = () => {
                                 spacing={1.5}
                                 justifyContent="end"
                             >
-                                <MenuCoin />
+                                {/* <MenuCoin /> */}
                                 <Button
                                     variant="text"
                                     onClick={changeLanguage}
@@ -97,8 +108,14 @@ const Topbar: FunctionComponent = () => {
                                     {t('العربية')}
                                 </Button>
 
-                                <Typography variant="body1" sx={{ color: 'body.light' }}>
-                                    {username ? `${t('Welcome')}, ${username}` : ''}{' '}
+                                <Typography
+                                    variant="body1"
+                                    sx={{
+                                        color: 'body.light',
+                                        fontSize: { xs: '12px', sm: '16px' },
+                                    }}
+                                >
+                                    {username ? `${t('Welcome')}, ${username}` : ''}
                                 </Typography>
 
                                 {isAuthenticated ? (

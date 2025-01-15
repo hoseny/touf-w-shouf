@@ -14,6 +14,7 @@ const nextConfig = {
     images: {
         domains: ['app.misrtravelco.net'],
     },
+    staticPageGenerationTimeout: 120,
 };
 
 module.exports = nextConfig;

@@ -70,14 +70,14 @@ const AdditionalServices: FunctionComponent<
         );
     };
 
-    if (error) return <Typography>{t("Error loading extra services.")}</Typography>;
+    if (error) return <Typography>{t('Error loading extra services.')}</Typography>;
 
     return (
         <>
             {isLoading && <Loading />}
 
             <Grid container spacing={4} sx={{ mt: 4 }}>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                     <Paper elevation={1} sx={{ backgroundColor: 'gray.light', p: 3 }}>
                         <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center' }}>
                             {t('Available pax')}
@@ -87,27 +87,26 @@ const AdditionalServices: FunctionComponent<
                         </Typography>
 
                         {Array.isArray(services) && services.length > 0 ? (
-    services.map(({ title, subtitle, price }, index) => (
-        <Counter
-            key={index}
-            title={t(title)}
-            subtitle={`${t("Price : ")}  ${price} ${t("EGP")}`} 
-            onChange={(count, type) =>
-                updatePrice(title, price, count, type)
-            }
-            maxCount={numberOfPeople || 0}
-            totalSelected={totalSelected}
-        />
-    ))
-) : (
-    <Typography variant="body2" sx={{ color: 'gray.main' }}>
-        {t('No services available')}
-    </Typography>
-)}
-
+                            services.map(({ title, subtitle, price }, index) => (
+                                <Counter
+                                    key={index}
+                                    title={t(title)}
+                                    subtitle={`${t('Price : ')}  ${price} ${t('EGP')}`}
+                                    onChange={(count, type) =>
+                                        updatePrice(title, price, count, type)
+                                    }
+                                    maxCount={numberOfPeople || 0}
+                                    totalSelected={totalSelected}
+                                />
+                            ))
+                        ) : (
+                            <Typography variant="body2" sx={{ color: 'gray.main' }}>
+                                {t('No services available')}
+                            </Typography>
+                        )}
                     </Paper>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                     <Paper elevation={1} sx={{ backgroundColor: 'gray.light', p: 3 }}>
                         <Typography variant="h5">{t('Additional Services')}</Typography>
                         {extraServicesData?.items.length > 0 ? (

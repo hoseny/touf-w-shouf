@@ -27,7 +27,7 @@ const Suggestion = () => {
                     justifyContent="center"
                     sx={{ height: '100%' }}
                 >
-                    <Typography variant="h1" sx={{ color: 'body.light' }}>
+                    <Typography variant="h1" textAlign={'center'} sx={{ color: 'body.light' }}>
                         {t('Complaint and Suggestion')}
                     </Typography>
                 </Stack>
@@ -45,7 +45,7 @@ const Suggestion = () => {
                         paddingBottom: '50px',
                     }}
                 >
-                    <Grid item xs={5}>
+                    <Grid item xs={12} md={5}>
                         <label htmlFor="message">
                             <Typography variant="subtitle1">{t('Your Message')}</Typography>
                         </label>

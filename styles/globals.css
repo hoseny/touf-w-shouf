@@ -115,6 +115,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 220px !important;
   }
 
+  .css-vpuv25 {
+    height: 100px !important;
+  }
+
   .css-llfh9y-MuiPaper-root-MuiAccordion-root:first-of-type,
   .css-llfh9y-MuiPaper-root-MuiAccordion-root:last-of-type {
     width: 350px !important;

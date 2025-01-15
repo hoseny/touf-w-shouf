@@ -358,7 +358,7 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                 <>
                     {loading && <Loading />}
                     <Grid container spacing={4}>
-                        <Grid item xs={2.5}>
+                        <Grid item xs={12} md={2.5}>
                             <FormControl sx={{ mt: 1, width: '100%' }} variant="outlined">
                                 <Select
                                     id="date-select"

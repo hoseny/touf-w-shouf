@@ -156,7 +156,7 @@ const Outings: FunctionComponent<Props> = () => {
     return (
         <Grid container justifyContent="center" alignItems="end">
             {/* Country Select */}
-            <Grid item xs={2}>
+            <Grid item xs={6} md={2}>
                 <Autocomplete
                     id="country"
                     options={(CountriesData || []).map((n: Countries) => ({
@@ -207,7 +207,7 @@ const Outings: FunctionComponent<Props> = () => {
             </Grid>
 
             {/* City Select*/}
-            <Grid item xs={2}>
+            <Grid item xs={6} md={2}>
                 <Autocomplete
                     id="city"
                     options={(citiesData || []).map((n: City) => ({
@@ -249,7 +249,7 @@ const Outings: FunctionComponent<Props> = () => {
             </Grid>
 
             {/* Trip Type Select */}
-            <Grid item xs={2.4}>
+            <Grid item xs={6} md={2.4}>
                 <Autocomplete
                     id="tripType"
                     options={TourTypeData.map((type: TourType) => ({
@@ -286,7 +286,7 @@ const Outings: FunctionComponent<Props> = () => {
                 />
             </Grid>
 
-            <Grid item xs={2.4}>
+            <Grid item xs={6} md={2.4}>
                 <DatePicker
                     selected={selectedDate}
                     onChange={handleDateChange}
@@ -324,7 +324,7 @@ const Outings: FunctionComponent<Props> = () => {
             </Grid>
 
             {/* Search Button */}
-            <Grid item xs={2}>
+            <Grid item xs={6} md={2}>
                 <Button
                     type="button"
                     variant="contained"

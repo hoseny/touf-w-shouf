@@ -16,7 +16,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 interface Props {}
 
 const Index: FunctionComponent<Props> = () => {
-    const { t } = useTranslation(); // الترجمة باستخدام hook
+    const { t } = useTranslation();
 
     return (
         <Box
@@ -31,8 +31,9 @@ const Index: FunctionComponent<Props> = () => {
         >
             <Container maxWidth="lg">
                 <Box sx={{ mb: 4 }}>
-                    <Grid container>
-                        <Grid item xs={3}>
+                    <Grid container spacing={3}>
+                        {/* About Us Section */}
+                        <Grid item xs={12} sm={6} md={3}>
                             <Box sx={{ mb: 2 }}>
                                 <Typography variant="subtitle1">{t('About Us')}</Typography>
                             </Box>
@@ -43,7 +44,9 @@ const Index: FunctionComponent<Props> = () => {
                                 <Link href={''}>{t('Cities')}</Link>
                             </Box>
                         </Grid>
-                        <Grid item xs={3}>
+
+                        {/* Information Section */}
+                        <Grid item xs={12} sm={6} md={3}>
                             <Box sx={{ mb: 2 }}>
                                 <Typography variant="subtitle1">{t('Information')}</Typography>
                             </Box>
@@ -57,7 +60,9 @@ const Index: FunctionComponent<Props> = () => {
                                 <Link href={''}>{t('Goals')}</Link>
                             </Box>
                         </Grid>
-                        <Grid item xs={3}>
+
+                        {/* Related Links Section */}
+                        <Grid item xs={12} sm={6} md={3}>
                             <Box sx={{ mb: 2 }}>
                                 <Typography variant="subtitle1">{t('Related links')}</Typography>
                             </Box>
@@ -78,7 +83,8 @@ const Index: FunctionComponent<Props> = () => {
                             </Box>
                         </Grid>
 
-                        <Grid item xs={3}>
+                        {/* Newsletter and Social Media Section */}
+                        <Grid item xs={12} sm={6} md={3}>
                             <Stack
                                 direction="column"
                                 justifyContent="space-between"
@@ -103,7 +109,11 @@ const Index: FunctionComponent<Props> = () => {
                                         />
                                         <Button
                                             variant="contained"
-                                            sx={{ borderRadius: '0 5px 5px 0', ml: '-5px', py: 2 }}
+                                            sx={{
+                                                borderRadius: '0 5px 5px 0',
+                                                ml: '-5px',
+                                                py: 2,
+                                            }}
                                         >
                                             <Typography variant="button">{t('Send')}</Typography>
                                         </Button>
@@ -146,8 +156,15 @@ const Index: FunctionComponent<Props> = () => {
                         </Grid>
                     </Grid>
                 </Box>
+
                 <Divider sx={{ borderColor: 'gray.main', my: 2 }} />
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+
+                <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    alignItems="center"
+                    justifyContent="space-between"
+                    spacing={{ xs: 2, sm: 0 }}
+                >
                     <Typography variant="caption">
                         {t('Touf w Shof. 2024 - All Rights Reserved')}
                     </Typography>

@@ -83,7 +83,6 @@ const Index: NextPage = () => {
         </AuthLayout>
     );
 
-    // دالة تسجيل الدخول
     async function handleLogin(
         values: Login,
         setValues: React.Dispatch<React.SetStateAction<Login>> | undefined,
