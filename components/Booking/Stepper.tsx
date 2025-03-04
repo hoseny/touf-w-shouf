@@ -10,7 +10,7 @@ import PassengerData from './PassengerData';
 import Payment from '@/pages/Payment/[ref]/[sp]';
 import Success from '@/pages/Payment/Success';
 
-const stepsComponent = ['Passenger data', 'Payment and confirm', 'Success'];
+const stepsComponent = ['Passenger data', 'Booking', 'Success'];
 
 export default function BookingStepper() {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -40,7 +40,7 @@ export default function BookingStepper() {
                 {activeStep === 0 ? (
                     <PassengerData handleNext={handleNext} setTripDate={setTripDate} />
                 ) : activeStep === 1 ? (
-                    <Payment handleBack={handleBack} />
+                    <Payment />
                 ) : (
                     activeStep === 2 && <Success />
                 )}

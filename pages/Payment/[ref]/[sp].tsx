@@ -10,6 +10,7 @@ import PaymentForm from '@/components/Booking/PaymentForm';
 import Swal from 'sweetalert2';
 import CircularProgress from '@mui/material/CircularProgress';
 import Loading from '@/components/Loading/Loading';
+import { useRouter } from 'next/router';
 interface GeideaData {
     responseCode: string;
     responseMessage: string;
@@ -19,17 +20,18 @@ interface GeideaData {
     reference: string;
 }
 
-interface Props {
-    handleBack: Function;
-}
-
-const Payment: React.FC<Props> = ({ handleBack }) => {
+const Payment = () => {
     const { t } = useTranslation();
     const [ref, setRef] = useState<string | null>(null);
     const [sp, setSp] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const customer_ref = typeof window !== 'undefined' ? localStorage.getItem('custcode') : null;
     const customerName = typeof window !== 'undefined' ? localStorage.getItem('NAME') : null;
+    const router = useRouter();
+
+    const handleLater = () => {
+        router.push('/myReservation');
+    };
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -352,12 +354,12 @@ const Payment: React.FC<Props> = ({ handleBack }) => {
             <Grid container sx={{ my: 3 }} justifyContent="space-between">
                 <Grid item xs={3} sx={{ margin: 'auto' }}>
                     <Button onClick={startPayment} variant="contained" fullWidth size="large">
-                        {t('Confirm')}
+                        {t('Pay Now')}
                     </Button>
                 </Grid>
                 <Grid item xs={3} sx={{ margin: 'auto' }}>
-                    <Button variant="outlined" onClick={() => handleBack()} fullWidth size="large">
-                        {t('Back')}
+                    <Button variant="outlined" onClick={handleLater} fullWidth size="large">
+                        {t('Pay Later')}
                     </Button>
                 </Grid>
             </Grid>

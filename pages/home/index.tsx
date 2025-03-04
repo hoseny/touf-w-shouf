@@ -65,7 +65,7 @@ const Home: NextPage = () => {
             </Container>
             <Carousel />
             <Container maxWidth="lg">
-                <DayUse title={t('Day Use')} />
+                <DayUse title={t('Day Trip')} />
             </Container>
             {/* <BannerAds {...banner1Props} /> */}
             <Carousel />

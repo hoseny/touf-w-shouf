@@ -202,7 +202,7 @@ const DetailsTabs: FunctionComponent<Props> = ({ id, productData }) => {
                     sx={{ color: 'primary.main' }}
                 >
                     <TaskAltIcon />
-                    <Typography variant="subtitle1">{t("All prices don't include VAT")}</Typography>
+                    <Typography variant="subtitle1">{t("All prices include VAT")}</Typography>
                 </Stack>
             </TabPanel>
 

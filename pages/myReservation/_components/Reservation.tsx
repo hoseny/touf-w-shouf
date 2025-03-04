@@ -113,7 +113,7 @@ const ReservationItem: FunctionComponent<Props> = ({
                                     spacing={2}
                                     className="mt-3 d-flex flex-wrap"
                                 >
-                                    {PayMentStatus !== 'Paid' && (
+                                    {/* {PayMentStatus !== 'Paid' && (
                                         <Button
                                             className="m-1"
                                             size="small"
@@ -122,7 +122,7 @@ const ReservationItem: FunctionComponent<Props> = ({
                                         >
                                             {t('Edit')}
                                         </Button>
-                                    )}
+                                    )} */}
 
                                     <Button
                                         className="m-1"

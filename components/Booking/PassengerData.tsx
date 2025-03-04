@@ -63,6 +63,7 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
     const [selectedPaxAval, setSelectedPaxAval] = useState<number | null>(null);
     const [groupNumber, setGroupNumber] = useState<number | null>(null);
     const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [isTermsAccepted, setIsTermsAccepted] = useState(false);
 
     const router = useRouter();
     const { code, programyear, languagecode } = router.query;
@@ -342,6 +343,13 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                 text: 'Please select at least one adult or child.',
                 confirmButtonColor: '#E07026',
             });
+        } else if (!isTermsAccepted) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Payment Error',
+                text: 'Please accept the terms and conditions.',
+                confirmButtonColor: '#E07026',
+            });
         } else {
             handlePayment(selectedServices);
         }
@@ -441,14 +449,19 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                         justifyContent="space-between"
                         sx={{ py: 2, mt: 3 }}
                     >
-                        <Typography variant="subtitle1">{t('Total')}</Typography>
-                        <Typography variant="subtitle1">
+                        <Typography variant="h3">{t('Total')}</Typography>
+                        <Typography variant="h3" className="fw-bold">
                             {totalPrice} {t('EGP')}
                         </Typography>
                     </Stack>
                     <Stack direction="row" alignItems="center">
                         <FormControlLabel
-                            control={<Checkbox defaultChecked />}
+                            control={
+                                <Checkbox
+                                    checked={isTermsAccepted} 
+                                    onChange={e => setIsTermsAccepted(e.target.checked)}
+                                />
+                            }
                             label={t('I Accept Terms And Conditions and Cancellation policy')}
                         />
                         <Typography
@@ -471,7 +484,7 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                                 }
                                 disabled={loading}
                             >
-                                {loading ? t('paying...') : t('Pay')}
+                                {loading ? t('Booking...') : t('Booking')}
                             </Button>
                         </Grid>
 
