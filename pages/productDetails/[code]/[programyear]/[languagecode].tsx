@@ -22,6 +22,7 @@ import { useGetDetailsArQuery } from '@/store/Products/ProgramDetailsAR/FetchDet
 import { useGetIncludingArQuery } from '@/store/Products/ProgramDetailsAR/FetchTourIncludingArApi';
 import { useGetTourExcludingArQuery } from '@/store/Products/ProgramDetailsAR/FetchTourExcludingArApi';
 import { useGetPolicyArQuery } from '@/store/Products/FetchPolicyArApi';
+import { useGetExcludingQuery } from '@/store/Products/FetchTourExcludingApi';
 
 interface Props {}
 
@@ -60,9 +61,24 @@ const Index: NextPage<Props> = () => {
         }
     );
 
+    // fetch tour Excluding
+    const { data: ExcludingData, error: ExcludingError } = useGetExcludingQuery(queryParamsInlude, {
+        skip: language !== 'en',
+    });
+
+    const { data: ExcludingDataAr, error: ExcludingErrorAr } = useGetExcludingQuery(
+        queryParamsInlude,
+        {
+            skip: language !== 'ar',
+        }
+    );
+
     const including = language === 'ar' ? includingDataAr?.items || [] : includingData?.items || [];
 
-    // fetch tour including
+    const excluding =
+        language === 'ar' ? ExcludingDataAr?.items || [] : ExcludingData?.items || [];
+
+    // fetch tour policy
     const { data: policyData, error: policyError } = useGetPolicyQuery(
         {
             code,
@@ -139,6 +155,15 @@ const Index: NextPage<Props> = () => {
                                             <Typography component="span">
                                                 {including[0]?.TourIncludin ||
                                                     t('No Tour Including available.')}
+                                            </Typography>
+                                        ),
+                                    },
+                                    {
+                                        title: 'Tour Excluding',
+                                        des: (
+                                            <Typography component="span">
+                                                {excluding[0]?.TOUREXCLUDING ||
+                                                    t('No Tour Excluding available.')}
                                             </Typography>
                                         ),
                                     },

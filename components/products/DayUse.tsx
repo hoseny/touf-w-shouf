@@ -67,7 +67,7 @@ const DayUse: FunctionComponent<Props> = ({ title }) => {
                                     IMG_Path={product.IMG_Path}
                                     Rate_Review={product.Rate_Review}
                                     languagecode={product.languagecode}
-                                    updatedLanguageCode={2}
+                                    updatedLanguageCode={1}
                                     offerPrice={0}
                                 />
                             </div>

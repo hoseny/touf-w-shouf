@@ -6,17 +6,19 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import Logo from '@/assets/images/logo_en.webp';
-import Misr from '@/assets/images/misr-tour.jpg';
 import Link from 'next/link';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import Drawer from '@mui/material/Drawer';
+import { useGetLogoQuery } from '@/store/Home/LogoSlice';
+import { ClientStorage } from '@/hooks/useLocalStroge';
+import Loading from '@/components/Loading/Loading';
 
 interface Props {
     window?: () => Window;
@@ -31,11 +33,30 @@ const Navbar: FunctionComponent<Props> = props => {
 
     const { t } = useTranslation();
     const router = useRouter();
+    const language = ClientStorage.get('language') || 'en';
+
+    useEffect(() => {
+        document.body.dir = language === 'ar' ? 'rtl' : 'ltr';
+    }, [language]);
+
+    const { code, programyear, languagecode } = router.query;
+
+    const queryParamsInlude = code && programyear ? { code, programyear } : undefined;
+
+    const { data, isLoading, isError } = useGetLogoQuery(queryParamsInlude, {
+        skip: language !== 'en',
+    });
+
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true); // Set a flag after the component mounts
+    }, []);
 
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
-        target: window ? window() : undefined,
+        target: isMounted && window ? window() : undefined, // ✅ Correct
     });
 
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -50,6 +71,18 @@ const Navbar: FunctionComponent<Props> = props => {
         }
         setDrawerOpen(open);
     };
+
+    if (!isMounted) {
+        return null; // Skip rendering on the server
+    }
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (isError) {
+        return <div>Error loading logo</div>;
+    }
 
     return (
         <ElevationScroll {...props}>
@@ -76,10 +109,14 @@ const Navbar: FunctionComponent<Props> = props => {
                                         sx={{ cursor: 'pointer' }}
                                     >
                                         <Image
-                                            src={Misr}
+                                            src={data?.Logo?.[0]?.Logo_PATH || Logo.src} // Use Logo.src for the fallback
                                             alt="logo-left"
                                             priority
-                                            layout="intrinsic"
+                                            width={150}
+                                            height={50}
+                                            onError={e => {
+                                                e.currentTarget.src = Logo.src; // Fallback to default logo
+                                            }}
                                         />
                                     </Box>
                                 </Grid>
@@ -112,7 +149,6 @@ const Navbar: FunctionComponent<Props> = props => {
                                             >
                                                 <ShoppingBagIcon />
                                             </IconButton>
-                                            {/* <SearchModal /> */}
                                         </Stack>
                                     </Stack>
 
@@ -144,7 +180,8 @@ const Navbar: FunctionComponent<Props> = props => {
                                             src={Logo}
                                             alt="logo-right"
                                             priority
-                                            layout="intrinsic"
+                                            width={150}
+                                            height={50}
                                         />
                                     </Box>
                                 </Grid>
