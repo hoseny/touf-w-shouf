@@ -117,7 +117,8 @@ const AdditionalServices: FunctionComponent<
                                         title={item.ext_srv}
                                         maxCount={numberOfPeople || 0}
                                         totalSelected={totalSelected}
-                                        subtitle={`${item.ext_descr} - ${item.ext_price} EGP - for ${item.p_category}`}
+                                        // subtitle={`${item.ext_descr} - ${item.ext_price} EGP - for ${item.p_category}`}
+                                        subtitle={`${item.ext_descr} - ${item.ext_price} EGP`}
                                         onChange={(count, type) =>
                                             updatePrice(item.ext_srv, item.ext_price, count, type)
                                         }

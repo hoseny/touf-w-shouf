@@ -1,18 +1,18 @@
 import { Product } from '@/data/products';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export const FetchDayUseApi = createApi({
-    reducerPath: 'ProductsDayUse',
+export const FetchDayUseEnApi = createApi({
+    reducerPath: 'FetchDayUseEnApi',
     baseQuery: fetchBaseQuery({
         baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
     }),
     endpoints: builder => ({
-        getDayUse: builder.query<{
+        getDayUseEn: builder.query<{
             item: any; DayUse: Product[] 
 }, void>({
-            query: () => '/ProgramArabic',
+            query: () => '/programENG',
         }),
     }),
 });
 
-export const { useGetDayUseQuery } = FetchDayUseApi;
+export const { useGetDayUseEnQuery } = FetchDayUseEnApi;

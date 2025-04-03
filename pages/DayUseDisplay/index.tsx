@@ -1,4 +1,3 @@
-import { useGetProductQuery } from '@/store/Products/GetProductsApi';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -6,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import WishlistButton from '@/components/products/WishlistButton';
 import Price from '@/components/products/Price';
 import ProductRating from '@/components/products/ProductRating';
@@ -14,20 +13,58 @@ import { useRouter } from 'next/router';
 import Loading from '@/components/Loading/Loading';
 import { Product } from '@/data/products';
 import { ToastContainer } from 'react-toastify';
-import { useGetDayUseQuery } from '@/store/Products/FetchDayUseApi';
 import { useTranslation } from 'react-i18next';
-
+import { useGetDayUseEnQuery } from '@/store/Products/FetchDayUseEnApi';
+import { useAppSelector } from '@/hooks/useStore';
+import { getLanguage } from '@/store/languageSlice';
+import { useGetDayUseArQuery } from '@/store/Products/FetchDayUseArApi';
 interface Props {
     myBooking?: boolean;
     productData: Product;
 }
 const DayUseDisplay: FunctionComponent<Product> = () => {
     const { t } = useTranslation();
-    const { data, error, isLoading } = useGetDayUseQuery();
     const router = useRouter();
-    if (error || !data) return <>{error}</>;
+    const language = useAppSelector(getLanguage);
+    const [dayUse, setDayUse] = useState<any[]>([]);
 
-    const products = data.DayUse;
+    const {
+        data: dayUseDataEn,
+        isLoading: isDayUseLoadingEn,
+        error: dayUseErrorEn,
+    } = useGetDayUseEnQuery(undefined, { skip: language !== 'en' });
+
+    const {
+        data: dayUseDataAr,
+        isLoading: isDayUseLoadingAr,
+        error: DayUseErrorAr,
+    } = useGetDayUseArQuery(undefined, { skip: language !== 'ar' });
+
+    useEffect(() => {
+        if (language === 'ar') {
+            setDayUse(dayUseDataAr?.DayUse || []);
+        } else {
+            setDayUse(dayUseDataEn?.DayUse || []);
+        }
+    }, [language, dayUseDataEn, dayUseDataAr]);
+
+    const isLoading = isDayUseLoadingEn || isDayUseLoadingAr;
+
+    const hasError = dayUseErrorEn || DayUseErrorAr;
+
+    const hasData = dayUse.length > 0;
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (hasError || !hasData) {
+        return (
+            <Typography variant="h6" color="error" className="text-center">
+                {t('Error Downloading Data')}
+            </Typography>
+        );
+    }
 
     return (
         <div className="container">
@@ -35,7 +72,7 @@ const DayUseDisplay: FunctionComponent<Product> = () => {
                 <ToastContainer />
                 {isLoading && <Loading />}
                 <h2 className="my-4 fw-bold">{t('All Trips')}</h2>
-                {products.map(product => (
+                {dayUse.map(product => (
                     <div key={product.prog_Code} className="col-md-4">
                         <Grid>
                             <Card

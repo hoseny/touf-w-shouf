@@ -1,16 +1,16 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 import Products from './Products';
 import { useRouter } from 'next/router';
 import Loading from '../Loading/Loading';
-import { useGetDayUseQuery } from '@/store/Products/FetchDayUseApi';
+import { useGetDayUseArQuery } from '@/store/Products/FetchDayUseArApi';
 import { Col, Container, Row } from 'react-bootstrap';
+import { ClientStorage } from '@/hooks/useLocalStroge';
+import { useGetDayUseEnQuery } from '@/store/Products/FetchDayUseEnApi';
 
 interface Props {
     title: string;
@@ -19,10 +19,22 @@ interface Props {
 
 const DayUse: FunctionComponent<Props> = ({ title }) => {
     const { t } = useTranslation();
-    const { data, error, isLoading } = useGetDayUseQuery();
+    const language = ClientStorage.get('language') || 'en';
     const Router = useRouter();
 
-    if (error) {
+    const {
+        data: dayUseDataEn,
+        error: dayUseErrorEn,
+        isLoading: isdayUseLoadingEn,
+    } = useGetDayUseEnQuery(undefined, { skip: language !== 'en' });
+
+    const {
+        data: dayUseDataAr,
+        error: dayUseErrorAr,
+        isLoading: isdayUseLoadingAr,
+    } = useGetDayUseArQuery(undefined, { skip: language !== 'ar' });
+
+    if (dayUseErrorAr && dayUseErrorEn) {
         return (
             <Typography variant="body1" sx={{ textAlign: 'center', color: 'red' }}>
                 {t('Failed to load Day Use')}
@@ -30,7 +42,7 @@ const DayUse: FunctionComponent<Props> = ({ title }) => {
         );
     }
 
-    if (isLoading) {
+    if (isdayUseLoadingAr || isdayUseLoadingEn) {
         return <Loading />;
     }
 
@@ -38,21 +50,24 @@ const DayUse: FunctionComponent<Props> = ({ title }) => {
         Router.push('/DayUseDisplay');
     };
 
-    const products = data?.DayUse || [];
+    const AlldayUse = language === 'ar' ? dayUseDataAr?.DayUse : dayUseDataEn?.DayUse;
+
+    if (!AlldayUse) {
+        return null; 
+    }
 
     return (
         <Container className="my-5">
-            {isLoading && <Loading />}
             <Typography variant="h2" sx={{ textAlign: 'center', mb: 3 }}>
                 {title}
             </Typography>
-            {products.length === 0 ? (
+            {AlldayUse.length === 0 ? (
                 <Typography variant="body1" sx={{ textAlign: 'center', color: 'red' }}>
                     {t('No trips found')}
                 </Typography>
             ) : (
                 <Row className="justify-content-center">
-                    {products.slice(1, 4).map(product => (
+                    {AlldayUse.slice(1, 4).map(product => (
                         <Col key={product.prog_Code} xs={12} sm={6} lg={4} className="mb-4">
                             <div
                                 className="reservation-card d-flex flex-column"

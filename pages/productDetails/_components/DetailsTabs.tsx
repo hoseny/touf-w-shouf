@@ -20,10 +20,10 @@ import { useGetSupplementQuery } from '@/store/Products/FetchSupplementApi';
 import UserRating from '@/components/products/UserRating';
 import ReviewForm from '../ReviewForm';
 import Loading from '@/components/Loading/Loading';
-import { useGetTourExcludingArQuery } from '@/store/Products/ProgramDetailsAR/FetchTourExcludingArApi';
 import { ClientStorage } from '@/hooks/useLocalStroge';
 import { useGetSupplementArQuery } from '@/store/Products/FetchSupplementArApi';
 import Modal from '@mui/material/Modal';
+import { useGetExcludingArQuery } from '@/store/Products/ProgramDetailsAR/FetchTourExcludingArApi';
 interface Props {
     id: string | number | undefined;
     productData: {
@@ -108,7 +108,7 @@ const DetailsTabs: FunctionComponent<Props> = ({ id, productData }) => {
 
     // Fetch TourExcludingAr
     const queryParamsInlude = { code, programyear };
-    const { data: TourExcludingAr, error: TourExcludingArError } = useGetTourExcludingArQuery(
+    const { data: TourExcludingAr, error: TourExcludingArError } = useGetExcludingArQuery(
         queryParamsInlude,
         {
             skip: language !== 'ar',
@@ -169,9 +169,9 @@ const DetailsTabs: FunctionComponent<Props> = ({ id, productData }) => {
                 <Typography variant="body2">
                     {t('End Date')}: {t(productData?.endDate || 'No end date available')}
                 </Typography>
-                {TourExcluding?.TOUREXCLUDING && (
+                {/* {TourExcluding?.TOUREXCLUDING && (
                     <Typography variant="body2">{t(TourExcluding.TOUREXCLUDING)}</Typography>
-                )}
+                )} */}
                 <BookButton code={code} programyear={programyear} languagecode={languagecode} />
             </TabPanel>
 

@@ -20,12 +20,15 @@ import Loading from '@/components/Loading/Loading';
 import { ClientStorage } from '@/hooks/useLocalStroge';
 import { useGetDetailsArQuery } from '@/store/Products/ProgramDetailsAR/FetchDetailsARApi';
 import { useGetIncludingArQuery } from '@/store/Products/ProgramDetailsAR/FetchTourIncludingArApi';
-import { useGetTourExcludingArQuery } from '@/store/Products/ProgramDetailsAR/FetchTourExcludingArApi';
 import { useGetPolicyArQuery } from '@/store/Products/FetchPolicyArApi';
 import { useGetExcludingQuery } from '@/store/Products/FetchTourExcludingApi';
+import { useGetExcludingArQuery } from '@/store/Products/ProgramDetailsAR/FetchTourExcludingArApi';
 
-interface Props {}
-
+interface Props {
+    code: string;
+    programyear: string;
+    languagecode: string;
+}
 const Index: NextPage<Props> = () => {
     const language = ClientStorage.get('language') || 'en';
 
@@ -35,11 +38,20 @@ const Index: NextPage<Props> = () => {
 
     const { t } = useTranslation();
     const router = useRouter();
-    const { code, programyear, languagecode } = router.query;
+    // const { code, programyear, languagecode } = router.query;
 
     // fetch details
-    const queryParams = code && programyear ? { code, programyear, languagecode } : undefined;
+    const getQueryParam = (param: string | string[] | undefined): string => {
+        if (Array.isArray(param)) return param[0] || '';
+        return param || '';
+    };
 
+    const code = getQueryParam(router.query.code);
+    const programyear = getQueryParam(router.query.programyear);
+    const languagecode = getQueryParam(router.query.languagecode);
+
+    // Now these are guaranteed to be strings
+    const queryParams = code && programyear ? { code, programyear, languagecode } : undefined;
     const { data, error, isLoading } = useGetDetailsQuery(queryParams, { skip: language !== 'en' });
 
     const {
@@ -61,22 +73,20 @@ const Index: NextPage<Props> = () => {
         }
     );
 
-    // fetch tour Excluding
-    const { data: ExcludingData, error: ExcludingError } = useGetExcludingQuery(queryParamsInlude, {
-        skip: language !== 'en',
-    });
-
-    const { data: ExcludingDataAr, error: ExcludingErrorAr } = useGetExcludingQuery(
-        queryParamsInlude,
-        {
-            skip: language !== 'ar',
-        }
-    );
-
     const including = language === 'ar' ? includingDataAr?.items || [] : includingData?.items || [];
 
-    const excluding =
-        language === 'ar' ? ExcludingDataAr?.items || [] : ExcludingData?.items || [];
+    // fetch tour Excluding
+    const { data: ExcludingData, error: ExcludingError } = useGetExcludingQuery(queryParamsInlude, {
+        skip: language !== 'en' || !queryParamsInlude,
+    });
+
+    const { data: ExcludingDataAr, error: ExcludingErrorAr } = useGetExcludingArQuery(
+        queryParamsInlude,
+        {
+            skip: language !== 'ar' || !queryParamsInlude,
+        }
+    );
+    const excluding = language === 'ar' ? ExcludingDataAr?.items || [] : ExcludingData?.items || [];
 
     // fetch tour policy
     const { data: policyData, error: policyError } = useGetPolicyQuery(
@@ -131,7 +141,7 @@ const Index: NextPage<Props> = () => {
                     {productData ? (
                         <>
                             <TitleAndRating title={productData.ProgramName} />
-                            <WatchVideoAndMap />
+                            <WatchVideoAndMap code={code} programyear={programyear} />
                             <Tags tags={t(productData.ClassTrip)} />
                             <LocationAndPriceAndTime
                                 time={`${productData.day} ${t('days')}`}

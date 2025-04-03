@@ -1,15 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const FetchTourExcludingArApi = createApi({
-    reducerPath: 'TourExcludingArData',
+    reducerPath: 'ExcludingArData',
     baseQuery: fetchBaseQuery({
         baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
     }),
     endpoints: builder => ({
-        getTourExcludingAr: builder.query({
-            query: ({ code, programyear }) => `/TourExcluding/${code}/${programyear}`,
+        getExcludingAr: builder.query({
+            query: ({ code, programyear }) => `/TourExcludingِAR/${code}/${programyear}`,
         }),
     }),
 });
 
-export const { useGetTourExcludingArQuery } = FetchTourExcludingArApi;
+export const { useGetExcludingArQuery } = FetchTourExcludingArApi;

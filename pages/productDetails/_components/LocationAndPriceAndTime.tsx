@@ -45,11 +45,11 @@ const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, locati
                     spacing={1}
                     sx={{ color: 'gray.main' }}
                 >
-                    <AttachMoneyIcon />
+                    {/* <AttachMoneyIcon /> */}
                     <Stack direction="row" spacing={0.5}>
                         <Typography variant="body1"> {t('Start Price')}:</Typography>
                         <Typography variant="subtitle1" sx={{ color: 'body.main' }}>
-                            {price ? t(`${price}`) : t('Price Not Available')}
+                            {price ? t(`${price}`) : t('Price Not Available')} {t('EGP')}
                         </Typography>
                     </Stack>
                 </Stack>

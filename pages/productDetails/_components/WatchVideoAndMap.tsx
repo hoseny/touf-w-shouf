@@ -1,104 +1,124 @@
-// import FavoriteIcon from '@mui/icons-material/Favorite';
-// import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-// import SignpostIcon from '@mui/icons-material/Signpost';
-// import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
-// import IconButton from '@mui/material/IconButton';
-// import Stack from '@mui/material/Stack';
-// import React ,{FunctionComponent} from 'react'      
-// import { useTranslation } from 'react-i18next';      
-// interface Props {}
-// const WatchVideoAndMap :FunctionComponent<Props> = () => {
-
-//     const {t} = useTranslation()      
-
-//   return (
-//     <Stack
-//     direction="row"
-//     justifyContent="start"
-//     alignItems="center"
-//     spacing={5}
-//     sx={{ mb: 3 }}
-//   >
-//     <Button variant="text" sx={{ padding: 0 }}>
-//       <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
-//         <FavoriteIcon />
-//       </IconButton>
-//       <Typography variant="body1" sx={{ color: 'body.main' }}>
-//         {t('Add to Wishlist')}
-//       </Typography>
-//     </Button>
-//     <Button variant="text" sx={{ padding: 0 }}>
-//       <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
-//         <PlayArrowRoundedIcon />
-//       </IconButton>
-//       <Typography variant="body1" sx={{ color: 'body.main' }}>
-//         {t('Watch Video')}
-//       </Typography>
-//     </Button>
-//     <Button variant="text" sx={{ padding: 0 }}>
-//       <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
-//         <SignpostIcon />
-//       </IconButton>
-//       <Typography variant="body1" sx={{ color: 'body.main' }}>
-//         {t('Map')}
-//       </Typography>
-//     </Button>
-//   </Stack>
-// )
-// };
-
-// export default WatchVideoAndMap
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import SignpostIcon from '@mui/icons-material/Signpost';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import { useGetVideoQuery } from '@/store/Products/FetchVideo';
+import Loading from '@/components/Loading/Loading';
+import DialogTitle from '@mui/material/DialogTitle';
+import CloseIcon from '@mui/icons-material/Close';
+import { ClientStorage } from '@/hooks/useLocalStroge';
 
-interface Props {}
+interface Props {
+    code: string;
+    programyear: string;
+}
 
-const WatchVideoAndMap: FunctionComponent<Props> = () => {
+const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
     const { t } = useTranslation();
+    const [openVideoDialog, setOpenVideoDialog] = useState(false);
+    const language = ClientStorage.get('language') || 'en';
+
+    // Fetch video data
+    const {
+        data: videoData,
+        isLoading,
+        isError,
+    } = useGetVideoQuery({
+        code,
+        programyear,
+    });
+
+    const handleOpenVideo = () => {
+        if (videoData?.Logo?.[0]?.Logo_PATH) {
+            setOpenVideoDialog(true);
+        }
+    };
+
+    const handleCloseVideo = () => {
+        setOpenVideoDialog(false);
+    };
+
+    if (isLoading) {
+        <Loading />;
+    }
 
     return (
-        <Stack
-            direction="row"
-            justifyContent="start"
-            alignItems="center"
-            spacing={5}
-            sx={{ mb: 3 }}
-        >
-            <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
-                    <FavoriteIcon />
-                </IconButton>
-                <Typography variant="body1" sx={{ color: 'body.main' }}>
-                    {t('Add to Wishlist')}
-                </Typography>
-            </div>
+        <>
+            <Stack
+                direction="row"
+                justifyContent="start"
+                alignItems="center"
+                spacing={5}
+                sx={{ mb: 3 }}
+            >
+                <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                    <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
+                        <FavoriteIcon />
+                    </IconButton>
+                    <Typography variant="body1" sx={{ color: 'body.main' }}>
+                        {t('Add to Wishlist')}
+                    </Typography>
+                </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
-                    <PlayArrowRoundedIcon />
-                </IconButton>
-                <Typography variant="body1" sx={{ color: 'body.main' }}>
-                    {t('Watch Video')}
-                </Typography>
-            </div>
+                <div
+                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                    onClick={handleOpenVideo}
+                >
+                    <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
+                        <PlayArrowRoundedIcon />
+                    </IconButton>
+                    <Typography variant="body1" sx={{ color: 'body.main' }}>
+                        {t('Watch Video')}
+                    </Typography>
+                </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
-                    <SignpostIcon />
-                </IconButton>
-                <Typography variant="body1" sx={{ color: 'body.main' }}>
-                    {t('Map')}
-                </Typography>
-            </div>
-        </Stack>
+                <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                    <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
+                        <SignpostIcon />
+                    </IconButton>
+                    <Typography variant="body1" sx={{ color: 'body.main' }}>
+                        {t('Map')}
+                    </Typography>
+                </div>
+            </Stack>
+
+            {/* Video Dialog */}
+            <Dialog open={openVideoDialog} onClose={handleCloseVideo} maxWidth="md" fullWidth>
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleCloseVideo}
+                        sx={{
+                            position: 'absolute',
+                            ...(language === 'ar'
+                                ? { left: 8, top: 0, right: 'auto' }
+                                : { right: 8, top: 0, left: 'auto' }),
+                            color: theme => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    {videoData?.Logo?.[0]?.Logo_PATH ? (
+                        <video controls autoPlay style={{ width: '100%', outline: 'none' }}>
+                            <source src={videoData.Logo[0].Logo_PATH} type="video/mp4" />
+                            {t('Your browser does not support the video tag.')}
+                        </video>
+                    ) : (
+                        <Typography variant="body1" sx={{ textAlign: 'center', p: 2 }}>
+                            {t('No video available')}
+                        </Typography>
+                    )}
+                </DialogContent>
+            </Dialog>
+        </>
     );
 };
 

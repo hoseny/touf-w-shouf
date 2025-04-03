@@ -25,13 +25,12 @@ import { ResetPasswordApi } from './ForgetPassword/ResetPasswordApi';
 import { FetchNationalityApi } from './Filter/FetchNationalityApi';
 import wishlistSlice from './wishlistSlice';
 import { FetchLanguageApi } from './FetchLanguageApi';
-import { FetchDayUseApi } from './Products/FetchDayUseApi';
+import { FetchDayUseArApi } from './Products/FetchDayUseArApi';
 import { FetchPackagesEnApi } from './Products/FetchPackagesEnApi';
 import { FetchPackagesArApi } from './Products/FetchPackagesArApi';
 import { FetchDetailsARApi } from './Products/ProgramDetailsAR/FetchDetailsARApi';
 import { FetchTourIncludingArApi } from './Products/ProgramDetailsAR/FetchTourIncludingArApi';
 import { FetchPolicyArApi } from './Products/ProgramDetailsAR/FetchPolicyArApi';
-import { FetchTourExcludingArApi } from './Products/ProgramDetailsAR/FetchTourExcludingArApi';
 import { FetchCountryEnApi } from './Filter/FetchCountryEnApi';
 import { FetchCountryArApi } from './Filter/FetchCountryArApi';
 import { FetchTourTypeApi } from './Filter/FetchTourTypeApi';
@@ -44,6 +43,9 @@ import { FetchUnPaidReservation } from './Reservation/FetchUnPaidReservation';
 import { FetchInvoiceById } from './Reservation/FetchInvoiceById';
 import { FetchTourExcludingApi } from './Products/FetchTourExcludingApi';
 import { fetchLogoSlice } from './Home/LogoSlice';
+import { FetchDayUseEnApi } from './Products/FetchDayUseEnApi';
+import { FetchVideo } from './Products/FetchVideo';
+import { FetchTourExcludingArApi } from './Products/ProgramDetailsAR/FetchTourExcludingArApi';
 
 export const store = configureStore({
     reducer: {
@@ -51,7 +53,8 @@ export const store = configureStore({
         user: userSlice,
         wishlist: wishlistSlice,
         [FetchProductApi.reducerPath]: FetchProductApi.reducer,
-        [FetchDayUseApi.reducerPath]: FetchDayUseApi.reducer,
+        [FetchDayUseArApi.reducerPath]: FetchDayUseArApi.reducer,
+        [FetchDayUseEnApi.reducerPath]: FetchDayUseEnApi.reducer,
         [RegisterApi.reducerPath]: RegisterApi.reducer,
         [LoginApi.reducerPath]: LoginApi.reducer,
         [FetchImagesApi.reducerPath]: FetchImagesApi.reducer,
@@ -79,7 +82,6 @@ export const store = configureStore({
         [FetchDetailsARApi.reducerPath]: FetchDetailsARApi.reducer,
         [FetchTourIncludingArApi.reducerPath]: FetchTourIncludingArApi.reducer,
         [FetchPolicyArApi.reducerPath]: FetchPolicyArApi.reducer,
-        [FetchTourExcludingArApi.reducerPath]: FetchTourExcludingArApi.reducer,
         [FetchCountryEnApi.reducerPath]: FetchCountryEnApi.reducer,
         [FetchTourTypeApi.reducerPath]: FetchTourTypeApi.reducer,
         [FetchCountryArApi.reducerPath]: FetchCountryArApi.reducer,
@@ -92,11 +94,16 @@ export const store = configureStore({
         [FetchInvoiceById.reducerPath]: FetchInvoiceById.reducer,
         [FetchTourExcludingApi.reducerPath]: FetchTourExcludingApi.reducer,
         [fetchLogoSlice.reducerPath]: fetchLogoSlice.reducer,
+        [FetchVideo.reducerPath]: FetchVideo.reducer,
+        [FetchTourExcludingArApi.reducerPath]: FetchTourExcludingArApi.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware()
+            .concat(FetchVideo.middleware)
+            .concat(FetchTourExcludingArApi.middleware)
             .concat(FetchProductApi.middleware)
-            .concat(FetchDayUseApi.middleware)
+            .concat(FetchDayUseArApi.middleware)
+            .concat(FetchDayUseEnApi.middleware)
             .concat(RegisterApi.middleware)
             .concat(LoginApi.middleware)
             .concat(FetchImagesApi.middleware)
@@ -125,7 +132,6 @@ export const store = configureStore({
             .concat(FetchDetailsARApi.middleware)
             .concat(FetchTourIncludingArApi.middleware)
             .concat(FetchPolicyArApi.middleware)
-            .concat(FetchTourExcludingArApi.middleware)
             .concat(FetchTourTypeApi.middleware)
             .concat(FetchCountryArApi.middleware)
             .concat(FetchPaidReservation.middleware)
@@ -136,7 +142,7 @@ export const store = configureStore({
             .concat(FetchUnPaidReservation.middleware)
             .concat(FetchInvoiceById.middleware)
             .concat(FetchTourExcludingApi.middleware)
-            .concat(fetchLogoSlice.middleware)
+            .concat(fetchLogoSlice.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
