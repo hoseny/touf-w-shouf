@@ -102,7 +102,7 @@ const DayUseDisplay: FunctionComponent<Product> = () => {
                                             router.push(
                                                 `/productDetails/${product.prog_Code}/${
                                                     product.prog_year
-                                                }/${2}`
+                                                }/${1}`
                                             )
                                         }
                                         sx={{
