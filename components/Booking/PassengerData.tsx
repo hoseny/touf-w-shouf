@@ -235,19 +235,19 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                             case 'ADULT':
                                 paxType = 'A';
                                 break;
-                            case 'ADULT IN SINGLE':
+                            case 'Single Room':
                                 paxType = 'A_S';
                                 break;
-                            case 'ADULT IN DOUBLE':
+                            case 'DOUBLE Room':
                                 paxType = 'A_D';
                                 break;
-                            case 'ADULT IN TRIPLE':
+                            case 'Triple Room':
                                 paxType = 'A_T';
                                 break;
-                            case 'ADULT IN SUITE':
+                            case 'Suite Room':
                                 paxType = 'A_U';
                                 break;
-                            case 'ADULT IN QUARTER':
+                            case 'Quarter Room':
                                 paxType = 'A_Q';
                                 break;
                             default:
@@ -458,7 +458,7 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={isTermsAccepted} 
+                                    checked={isTermsAccepted}
                                     onChange={e => setIsTermsAccepted(e.target.checked)}
                                 />
                             }
