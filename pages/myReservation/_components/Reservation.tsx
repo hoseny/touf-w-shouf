@@ -35,15 +35,48 @@ const ReservationItem: FunctionComponent<Props> = ({
     };
     const { t } = useTranslation();
     const printRef = useRef<HTMLDivElement>(null);
+
     const handlePrintWindow = () => {
         const content = `
         <html>
         <head>
             <title>Invoice</title>
             <style>
-            body { font-family: Arial; padding: 20px; }
+            body { 
+                font-family: Arial, sans-serif; 
+                padding: 20px; 
+                margin: 0;
+                background-color: #fff;
+            }
             h2 { color: #E07026; }
-            .label { font-weight: bold;color:#E07026; }
+            .label { font-weight: bold; color:#E07026; }
+            .container { width: 100%; }
+            .row { display: flex; flex-wrap: wrap; }
+            .col-12 { width: 100%; }
+            .col-lg-6 { width: 50%; padding: 10px; }
+            .reservation-img-box { width: 100%; height: auto; }
+            @media print {
+                body { padding: 10px; font-size: 14px; }
+                .col-lg-6 {
+                    width: 100%; /* عرض الصورة بشكل كامل على الهواتف */
+                    padding: 0;
+                }
+                .reservation-img-box img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 10px;
+                }
+                .row {
+                    display: block; /* ترتيب العمود في الصفوف على الهواتف */
+                }
+                .container {
+                    width: 100%;
+                }
+                /* إخفاء الأزرار في الطباعة */
+                button {
+                    display: none;
+                }
+            }
             </style>
         </head>
         <body>
