@@ -395,7 +395,7 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                             variant="subtitle1"
                             sx={{ color: 'secondary.main', ml: '-5px' }}
                         >
-                            <Link href="/">{t('Read Terms and conditions')}</Link>
+                            <Link href={'/Terms'}>{t('Read Terms and conditions')}</Link>
                         </Typography>
                     </Stack>
 

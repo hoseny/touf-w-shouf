@@ -13,6 +13,7 @@ import Loading from '@/components/Loading/Loading';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import { ClientStorage } from '@/hooks/useLocalStroge';
+import { toast, ToastContainer } from 'react-toastify';
 
 interface Props {
     code: string;
@@ -24,7 +25,6 @@ const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
     const [openVideoDialog, setOpenVideoDialog] = useState(false);
     const language = ClientStorage.get('language') || 'en';
 
-    // Fetch video data
     const {
         data: videoData,
         isLoading,
@@ -35,7 +35,9 @@ const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
     });
 
     const handleOpenVideo = () => {
-        if (videoData?.Logo?.[0]?.Logo_PATH) {
+        if (videoData?.Vedio?.[0]?.Status === 'No_Vedio_Return') {
+            toast.error('No video available');
+        } else if (videoData?.Vedio?.[0]?.Logo_PATH) {
             setOpenVideoDialog(true);
         }
     };
@@ -45,11 +47,12 @@ const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
     };
 
     if (isLoading) {
-        <Loading />;
+        return <Loading />;
     }
 
     return (
         <>
+            <ToastContainer />
             <Stack
                 direction="row"
                 justifyContent="start"
@@ -78,14 +81,14 @@ const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
                     </Typography>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                {/* <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                     <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
                         <SignpostIcon />
                     </IconButton>
                     <Typography variant="body1" sx={{ color: 'body.main' }}>
                         {t('Map')}
                     </Typography>
-                </div>
+                </div> */}
             </Stack>
 
             {/* Video Dialog */}
@@ -106,16 +109,16 @@ const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
-                    {videoData?.Logo?.[0]?.Logo_PATH ? (
-                        <video controls autoPlay style={{ width: '100%', outline: 'none' }}>
-                            <source src={videoData.Logo[0].Logo_PATH} type="video/mp4" />
-                            {t('Your browser does not support the video tag.')}
-                        </video>
-                    ) : (
+                    {videoData?.Vedio?.[0]?.Status === 'No_Vedio_Return' ? (
                         <Typography variant="body1" sx={{ textAlign: 'center', p: 2 }}>
                             {t('No video available')}
                         </Typography>
-                    )}
+                    ) : videoData?.Vedio?.[0]?.Logo_PATH ? (
+                        <video controls autoPlay style={{ width: '100%', outline: 'none' }}>
+                            <source src={videoData.Vedio[0].Logo_PATH} type="video/mp4" />
+                            {t('Your browser does not support the video tag.')}
+                        </video>
+                    ) : null}
                 </DialogContent>
             </Dialog>
         </>
