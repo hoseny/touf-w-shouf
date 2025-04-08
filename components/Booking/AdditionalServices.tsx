@@ -47,16 +47,19 @@ const AdditionalServices: FunctionComponent<
         serviceName: string,
         servicePrice: number,
         count: number,
-        type: 'increase' | 'decrease'
+        type: 'increase' | 'decrease',
+        isExtraService: boolean = false
     ) => {
+        const serviceKey = isExtraService ? `extra_${serviceName}` : serviceName;
+        
         setSelectedServices((prevServices: { [x: string]: number }) => {
-            const currentCount = prevServices[serviceName] || 0;
+            const currentCount = prevServices[serviceKey] || 0;
             const newCount =
                 type === 'increase' ? currentCount + count : Math.max(currentCount - count, 0);
 
             return {
                 ...prevServices,
-                [serviceName]: newCount,
+                [serviceKey]: newCount,
             };
         });
 
@@ -93,7 +96,7 @@ const AdditionalServices: FunctionComponent<
                                     title={t(title)}
                                     subtitle={`${t('Price : ')}  ${price} ${t('EGP')}`}
                                     onChange={(count, type) =>
-                                        updatePrice(title, price, count, type)
+                                        updatePrice(title, price, count, type, false)
                                     }
                                     maxCount={numberOfPeople || 0}
                                     totalSelected={totalSelected}
@@ -117,10 +120,9 @@ const AdditionalServices: FunctionComponent<
                                         title={item.ext_srv}
                                         maxCount={numberOfPeople || 0}
                                         totalSelected={totalSelected}
-                                        // subtitle={`${item.ext_descr} - ${item.ext_price} EGP - for ${item.p_category}`}
                                         subtitle={`${item.ext_descr} - ${item.ext_price} EGP`}
                                         onChange={(count, type) =>
-                                            updatePrice(item.ext_srv, item.ext_price, count, type)
+                                            updatePrice(item.ext_srv, item.ext_price, count, type, true)
                                         }
                                     />
                                 )
@@ -136,4 +138,5 @@ const AdditionalServices: FunctionComponent<
         </>
     );
 };
-export default AdditionalServices;
+
+export default AdditionalServices

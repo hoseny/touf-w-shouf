@@ -174,12 +174,11 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
             const progGrpNo = groupPriceData?.items?.[0]?.prog_grp_no;
             if (!progGrpNo) {
                 console.error('No program group number found.');
-                console.log(progGrpNo);
-
                 setLoading(false);
                 return;
             }
-
+    
+            // 1. إنشاء الحجز الأساسي
             const reservationResponse = await addReservation({
                 CUST_REF: customerData.CustCode,
                 TELEPHONE: customerData.TELEPHONE,
@@ -188,144 +187,70 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                 lang: languagecode,
                 PROG_YEAR: programyear,
             }).unwrap();
-
-            console.log('Reservation added:', reservationResponse);
-
-            if (reservationResponse) {
-                let refNo, resSp;
-
-                if (typeof window !== 'undefined') {
-                    refNo = reservationResponse.REF_NO;
-                    resSp = reservationResponse.RESSP;
-                    sessionStorage.setItem('ref_no', refNo);
-                    sessionStorage.setItem('Res_sp', resSp);
-                }
-
-                const servicesToBook = Object.entries(selectedServices).filter(
-                    ([service, count]) => Number(count) > 0
-                );
-
-                if (servicesToBook.length > 0) {
-                    const extraRequests = [];
-
-                    for (const [serviceName, count] of servicesToBook) {
-                        const paxData = groupPriceData.items.find(
-                            (item: { pax_type: string }) => item.pax_type === serviceName
-                        );
-
-                        if (!paxData) {
-                            continue;
-                        }
-
-                        let paxType: string;
-
-                        switch (paxData.pax_type) {
-                            case 'CHILD FROM 1 TO 6 DayUse':
-                                paxType = 'CH1';
-                                break;
-                            case 'CHILD FROM 1 TO 6 Packages':
-                                paxType = 'CH-1';
-                                break;
-                            case 'CHILD FROM 6 TO 12 DayUse':
-                                paxType = 'CH2';
-                                break;
-                            case 'CHILD FROM 6 TO 12 Packages':
-                                paxType = 'CH-2';
-                                break;
-                            case 'ADULT':
-                                paxType = 'A';
-                                break;
-                            case 'Single Room':
-                                paxType = 'A_S';
-                                break;
-                            case 'DOUBLE Room':
-                                paxType = 'A_D';
-                                break;
-                            case 'Triple Room':
-                                paxType = 'A_T';
-                                break;
-                            case 'Suite Room':
-                                paxType = 'A_U';
-                                break;
-                            case 'Quarter Room':
-                                paxType = 'A_Q';
-                                break;
-                            default:
-                                console.error(`Unknown pax type: ${paxData.pax_type}`);
-                                setLoading(false);
-                                continue;
-                        }
-
-                        const reservationDetailsResponse = await addReservationDetails({
-                            REF_NO: sessionStorage.getItem('ref_no'),
-                            RESSP: sessionStorage.getItem('Res_sp'),
-                            CUST_REF: localStorage.getItem('custcode'),
+    
+            if (!reservationResponse) {
+                throw new Error('Failed to create reservation');
+            }
+    
+            // حفظ بيانات الحجز
+            sessionStorage.setItem('ref_no', reservationResponse.REF_NO);
+            sessionStorage.setItem('Res_sp', reservationResponse.RESSP);
+    
+            // 2. معالجة الخدمات الأساسية (الغرف)
+            for (const [serviceKey, count] of Object.entries(selectedServices)) {
+                if (count <= 0) continue;
+    
+                // إذا كانت خدمة أساسية (ليست إضافية)
+                if (!serviceKey.startsWith('extra_')) {
+                    const paxData = groupPriceData.items.find(
+                        (item: any) => item.pax_type === serviceKey
+                    );
+    
+                    if (paxData) {
+                        await addReservationDetails({
+                            REF_NO: reservationResponse.REF_NO,
+                            RESSP: reservationResponse.RESSP,
+                            CUST_REF: customerData.CustCode,
                             CODE: code,
                             YEAR: programyear,
-                            PAX_TYPE: paxType,
+                            PAX_TYPE: paxData.p_category,
                             PAX_COUNT: count,
                             PROG_GRP_NO: progGrpNo,
                         }).unwrap();
-
-                        if (
-                            reservationDetailsResponse.Error &&
-                            reservationDetailsResponse.Error === 'You insert this type last'
-                        ) {
-                            console.error('Error: This type was added previously.');
-                            toast.error('Error: This type was added previously.');
-                            setLoading(false);
-                            return;
-                        }
-
-                        if (extraData?.ext_srv && extraData?.p_category && extraData?.item_ref) {
-                            extraRequests.push({
-                                CUST_REF: localStorage.getItem('custcode'),
-                                REF_NO: sessionStorage.getItem('ref_no'),
-                                RES_SP: sessionStorage.getItem('Res_sp'),
-                                SRV_TYPE: extraData.ext_srv,
-                                PAX_TYPE: extraData.p_category,
-                                PAX_COUNT: count,
-                                ITEM_REF: extraData.item_ref,
-                            });
-                        }
-                    }
-
-                    if (extraRequests.length > 0) {
-                        for (const extraRequest of extraRequests) {
-                            const extraResponse = await addExtra({
-                                code: code,
-                                year: programyear,
-                                ...extraRequest,
-                            }).unwrap();
-
-                            if (
-                                extraResponse.Error &&
-                                extraResponse.Error === 'You insert this type last'
-                            ) {
-                                console.error(
-                                    'Error: This type was added previously for extra services.'
-                                );
-                                setLoading(false);
-                                toast.error(
-                                    'Error: This type was added previously for extra services.'
-                                );
-                                return;
-                            }
-                        }
                     }
                 }
-
-                handleNext();
-                // if (typeof window !== 'undefined') {
-                //     sessionStorage.removeItem('Res_sp');
-                //     sessionStorage.removeItem('ref_no');
-                // }
-            } else {
-                console.error('Reservation was not successful:', reservationResponse);
-                setLoading(false);
             }
+    
+            // 3. معالجة الخدمات الإضافية
+            if (extra?.items) {
+                for (const [serviceKey, count] of Object.entries(selectedServices)) {
+                    if (count <= 0 || !serviceKey.startsWith('extra_')) continue;
+    
+                    const serviceName = serviceKey.replace('extra_', '');
+                    const extraService = extra.items.find(
+                        (item: ExtraService) => item.ext_srv === serviceName
+                    );
+    
+                    if (extraService) {
+                        await addExtra({
+                            code: code,
+                            year: programyear,
+                            CUST_REF: customerData.CustCode,
+                            REF_NO: reservationResponse.REF_NO,
+                            RES_SP: reservationResponse.RESSP,
+                            SRV_TYPE: extraService.ext_srv,
+                            PAX_TYPE: extraService.p_category,
+                            PAX_COUNT: count,
+                            ITEM_REF: extraService.item_ref,
+                        }).unwrap();
+                    }
+                }
+            }
+    
+            handleNext();
         } catch (error) {
             console.error('Error during payment process:', error);
+            toast.error('Failed to complete booking. Please try again.');
             setLoading(false);
         }
     };
@@ -449,8 +374,10 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                         justifyContent="space-between"
                         sx={{ py: 2, mt: 3 }}
                     >
-                        <Typography variant="h3">{t('Total')}</Typography>
-                        <Typography variant="h3" className="fw-bold">
+                        <Typography variant="h3" className="text-danger">
+                            {t('Total')}
+                        </Typography>
+                        <Typography variant="h3" className="fw-bold text-danger">
                             {totalPrice} {t('EGP')}
                         </Typography>
                     </Stack>

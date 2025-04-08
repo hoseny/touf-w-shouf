@@ -14,7 +14,13 @@ interface Props {
     maxCount: number;
 }
 
-const Counter: FunctionComponent<Props & { totalSelected: number }> = ({ title, subtitle, onChange ,maxCount ,totalSelected}) => {
+const Counter: FunctionComponent<Props & { totalSelected: number }> = ({
+    title,
+    subtitle,
+    onChange,
+    maxCount,
+    totalSelected,
+}) => {
     const { t } = useTranslation();
     const [count, setCount] = useState(0);
 
