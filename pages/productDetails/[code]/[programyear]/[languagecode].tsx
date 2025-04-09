@@ -121,6 +121,8 @@ const Index: NextPage<Props> = () => {
     }
     const productData = language === 'ar' ? DataAr?.items?.[0] : data?.items?.[0];
 
+    console.log('productData', productData);
+
     if (!productData) {
         return (
             <Typography variant="h6" sx={{ padding: '10px', textAlign: 'center' }}>
@@ -141,7 +143,11 @@ const Index: NextPage<Props> = () => {
                     {productData ? (
                         <>
                             <TitleAndRating title={productData.ProgramName} />
-                            <WatchVideoAndMap code={code} programyear={programyear} />
+                            <WatchVideoAndMap
+                                code={productData.PROGCODE}
+                                programyear={productData.ProgramYear}
+                                productData={productData}
+                            />
                             <Tags tags={t(productData.ClassTrip)} />
                             <LocationAndPriceAndTime
                                 time={`${productData.day} ${t('days')}`}

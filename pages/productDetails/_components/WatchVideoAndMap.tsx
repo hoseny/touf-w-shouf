@@ -1,4 +1,5 @@
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import SignpostIcon from '@mui/icons-material/Signpost';
 import Typography from '@mui/material/Typography';
@@ -14,16 +15,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import { ClientStorage } from '@/hooks/useLocalStroge';
 import { toast, ToastContainer } from 'react-toastify';
-
+import Checkbox from '@mui/material/Checkbox';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import { addToWishlist, removeFromWishlist, setWishlist } from '@/store/wishlistSlice';
+import { Product } from '@/data/products';
+import Box from '@mui/material/Box';
 interface Props {
     code: string;
     programyear: string;
+    productData: Product;
 }
 
-const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
+const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear, productData }) => {
     const { t } = useTranslation();
     const [openVideoDialog, setOpenVideoDialog] = useState(false);
     const language = ClientStorage.get('language') || 'en';
+    const dispatch = useAppDispatch();
+    const wishlistItems = useAppSelector(state => state.wishlist.items);
 
     const {
         data: videoData,
@@ -33,6 +41,21 @@ const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
         code,
         programyear,
     });
+
+    const isInWishlist = wishlistItems.some(item => item.prog_Code === productData.prog_Code);
+
+    const handleToggleWishlist = () => {
+        if (isInWishlist) {
+            dispatch(removeFromWishlist(productData.prog_Code));
+            toast.error(t('trip removed from wish list') as string);
+        } else {
+            dispatch(addToWishlist(productData));
+            toast.success(t('trip added to wish list') as string, {
+                className: 'toast-orange',
+                autoClose: 2000,
+            });
+        }
+    };
 
     const handleOpenVideo = () => {
         if (videoData?.Vedio?.[0]?.Status === 'No_Vedio_Return') {
@@ -61,12 +84,32 @@ const WatchVideoAndMap: FunctionComponent<Props> = ({ code, programyear }) => {
                 sx={{ mb: 3 }}
             >
                 <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                    <IconButton color="primary" sx={{ boxShadow: 1, mr: 2 }}>
-                        <FavoriteIcon />
-                    </IconButton>
-                    <Typography variant="body1" sx={{ color: 'body.main' }}>
-                        {t('Add to Wishlist')}
-                    </Typography>
+                    <Box
+                        onClick={handleToggleWishlist}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            '&:hover': {
+                                opacity: 0.8,
+                            },
+                        }}
+                    >
+                        <Checkbox
+                            icon={<FavoriteBorderIcon color="primary" />}
+                            checkedIcon={<FavoriteIcon />}
+                            checked={isInWishlist}
+                            onChange={handleToggleWishlist}
+                            sx={{
+                                p: 0,
+                                mr: 1,
+                                pointerEvents: 'none',
+                            }}
+                        />
+                        <Typography variant="body1" sx={{ color: 'body.main' }}>
+                            {t('Add to Wishlist')}
+                        </Typography>
+                    </Box>
                 </div>
 
                 <div

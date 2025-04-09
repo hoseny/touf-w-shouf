@@ -50,13 +50,13 @@ const Navbar: FunctionComponent<Props> = props => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        setIsMounted(true); // Set a flag after the component mounts
+        setIsMounted(true); 
     }, []);
 
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
-        target: isMounted && window ? window() : undefined, // ✅ Correct
+        target: isMounted && window ? window() : undefined, 
     });
 
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -73,7 +73,7 @@ const Navbar: FunctionComponent<Props> = props => {
     };
 
     if (!isMounted) {
-        return null; // Skip rendering on the server
+        return null; 
     }
 
     if (isLoading) {
@@ -109,13 +109,13 @@ const Navbar: FunctionComponent<Props> = props => {
                                         sx={{ cursor: 'pointer' }}
                                     >
                                         <Image
-                                            src={data?.Logo?.[0]?.Logo_PATH || Logo.src} // Use Logo.src for the fallback
+                                            src={data?.Logo?.[0]?.Logo_PATH || Logo.src} 
                                             alt="logo-left"
                                             priority
                                             width={150}
                                             height={50}
                                             onError={e => {
-                                                e.currentTarget.src = Logo.src; // Fallback to default logo
+                                                e.currentTarget.src = Logo.src; 
                                             }}
                                         />
                                     </Box>
@@ -137,7 +137,10 @@ const Navbar: FunctionComponent<Props> = props => {
                                         <Link href={'/Suggestion'}>
                                             {t('Complaint and Suggestion')}
                                         </Link>
-                                        <Stack
+                                        <Link href={'/wishlist'}>
+                                            {t('My WishList')}
+                                        </Link>
+                                        {/* <Stack
                                             direction="row"
                                             alignItems="center"
                                             spacing={1.5}
@@ -149,7 +152,7 @@ const Navbar: FunctionComponent<Props> = props => {
                                             >
                                                 <ShoppingBagIcon />
                                             </IconButton>
-                                        </Stack>
+                                        </Stack> */}
                                     </Stack>
 
                                     <IconButton
