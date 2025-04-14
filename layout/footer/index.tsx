@@ -38,7 +38,7 @@ const Index: FunctionComponent<Props> = () => {
                                 <Typography variant="subtitle1">{t('About Us')}</Typography>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href={''}>{t('Contact Us')}</Link>
+                                <Link href="/ContactUs">{t('Contact Us')}</Link>
                             </Box>
                             <Box sx={{ mb: 2 }}>
                                 <Link href={''}>{t('Cities')}</Link>
@@ -67,19 +67,49 @@ const Index: FunctionComponent<Props> = () => {
                                 <Typography variant="subtitle1">{t('Related links')}</Typography>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href={''}>{t('Ministry of Tourism')}</Link>
+                                <a
+                                    href="https://www.misrtravel.net"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {t('Misr Travel')}
+                                </a>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href={''}>{t('Ministry of Antiquities')}</Link>
+                                <a
+                                    href="https://www.experienceegypt.eg/en"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {t(' experience egypt')}
+                                </a>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href={''}>{t('Ministry of Environment')}</Link>
+                                <a
+                                    href="https://mota.gov.eg/ar"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {t('Ministry of Tourism and Antiquities')}
+                                </a>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href={''}>{t('Ministry of Education')}</Link>
+                                <a
+                                    href="http://www.mpbs.gov.eg/Arabic/Pages/default.aspx"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {t('Ministry of Public Business Sector')}
+                                </a>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href={''}>{t('Egyptian Government Portal')}</Link>
+                                <a
+                                    href="https://hotac.com.eg"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {t('Tourism and Hotels Holding Company')}
+                                </a>
                             </Box>
                         </Grid>
 

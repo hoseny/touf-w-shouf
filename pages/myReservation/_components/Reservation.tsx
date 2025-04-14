@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
+import Logo from '@/assets/images/misr-logo.JPG';
+import LogoTouf from '@/assets/images/logo_en.webp';
 
 interface Props {
     customerName: string;
@@ -16,6 +18,22 @@ interface Props {
     IMG_Path: string;
     PROG_YEAR: number;
     priority?: boolean;
+    // Add these new props for the additional details
+    phone?: string;
+    email?: string;
+    numberOfAdults?: number;
+    numberOfChildrenUnder6?: number;
+    numberOfChildrenBetween6And12?: number;
+    TheNumberOfCHILDFROM6TO12DayUseX?: number;
+    TheNumberOfADULTINSINGLEX?: number;
+    TheNumberOfADULTINDOUBLEX?: number;
+    TheNumberOfADULTINTRIPLEX?: number;
+    TheNumberOfADULTINSUITEX?: number;
+    TheNumberOfADULTINQUARTERX?: number;
+    totalAdditionalService?: string;
+    totalWithoutAdditionalService?: string;
+    vat?: string;
+    totalWithVat?: string;
 }
 
 const ReservationItem: FunctionComponent<Props> = ({
@@ -29,6 +47,21 @@ const ReservationItem: FunctionComponent<Props> = ({
     ProgramName,
     IMG_Path,
     priority = false,
+    phone = '',
+    email = '',
+    numberOfAdults = 0,
+    numberOfChildrenUnder6 = 0,
+    numberOfChildrenBetween6And12 = 0,
+    TheNumberOfCHILDFROM6TO12DayUseX = 0,
+    TheNumberOfADULTINSINGLEX = 0,
+    TheNumberOfADULTINDOUBLEX = 0,
+    TheNumberOfADULTINTRIPLEX = 0,
+    TheNumberOfADULTINSUITEX = 0,
+    TheNumberOfADULTINQUARTERX = 0,
+    totalAdditionalService = '0',
+    totalWithoutAdditionalService = '0',
+    vat = '0',
+    totalWithVat = '0',
 }) => {
     const labelStyle = {
         color: '#E07026',
@@ -37,60 +70,122 @@ const ReservationItem: FunctionComponent<Props> = ({
     const printRef = useRef<HTMLDivElement>(null);
 
     const handlePrintWindow = () => {
+        const logoPath = typeof Logo === 'string' ? Logo : Logo.src;
+        const logoPathTouf = typeof LogoTouf === 'string' ? LogoTouf : LogoTouf.src;
+
         const content = `
         <html>
         <head>
             <title>Invoice</title>
             <style>
-            body { 
-                font-family: Arial, sans-serif; 
-                padding: 20px; 
-                margin: 0;
-                background-color: #fff;
-            }
-            h2 { color: #E07026; }
-            .label { font-weight: bold; color:#E07026; }
-            .container { width: 100%; }
-            .row { display: flex; flex-wrap: wrap; }
-            .col-12 { width: 100%; }
-            .col-lg-6 { width: 50%; padding: 10px; }
-            .reservation-img-box { width: 100%; height: auto; }
-            @media print {
-                body { padding: 10px; font-size: 14px; }
-                .col-lg-6 {
-                    width: 100%; /* عرض الصورة بشكل كامل على الهواتف */
-                    padding: 0;
+                body { 
+                    font-family: Arial, sans-serif; 
+                    padding: 20px; 
+                    margin: 0;
+                    background-color: #fff;
                 }
-                .reservation-img-box img {
-                    width: 100%;
-                    height: auto;
-                    border-radius: 10px;
+                .container { max-width: 1000px; margin: 0 auto; }
+                .row { display: flex; flex-wrap: wrap; margin-bottom: 20px; }
+                .col-md-12 { width: 100%; }
+                .col-md-6 { width: 50%; padding: 0 15px; box-sizing: border-box; }
+                .bg-light { background-color: #f8f9fa; }
+                .p-3 { padding: 16px; }
+                .mt-4 { margin-top: 16px; }
+                .mt-5 { margin-top: 32px; }
+                .mb-2 { margin-bottom: 8px; }
+                .text-center { text-align: center; }
+                .text-white { color: white; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+                .success-icon { 
+                    font-size: 177px; 
+                    color: #E07026; 
+                    margin: 0 auto 16px auto; 
+                    display: block; 
+                    text-align: center;
                 }
-                .row {
-                    display: block; /* ترتيب العمود في الصفوف على الهواتف */
+                .d-flex { display: flex; }
+                .flex-wrap { flex-wrap: wrap; }
+                .justify-content-between { justify-content: space-between; }
+                .align-items-center { align-items: center; }
+                .ml-1 { margin-left: 4px; }
+                .w-100 { width: 100%; }
+                
+                @media print {
+                    body { padding: 10px; }
+                    button { display: none; }
+                    .col-md-6 { width: 50%; }
+                    .break-before { page-break-before: always; }
                 }
-                .container {
-                    width: 100%;
-                }
-                /* إخفاء الأزرار في الطباعة */
-                button {
-                    display: none;
-                }
-            }
             </style>
         </head>
         <body>
-            <h2>Invoice No: ${reservationNo}</h2>
-            <p><span class="label">Customer Name:</span> ${customerName}</p>
-            <p><span class="label">Program Name:</span> ${ProgramName}</p>
-            <p><span class="label">Trip Date:</span> ${tripDate}</p>
-            <p><span class="label">Payment Status:</span> ${PayMentStatus}</p>
-            <p><span class="label">Total Payment:</span> ${totalPayment} ${Currany}</p>
-            <p><span class="label">Program Year:</span> ${PROG_YEAR}</p>
+            <div class="container">
+
+                <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <img src="${logoPath}" alt="Logo" style="max-width: 150px; height: auto;" />
+                </div>
+                <div>
+                    <img src="${logoPathTouf}" alt="Logo" style="max-width: 150px; height: auto;" />
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center mb-2">
+                            <h3>${t('Invoice Status')}</h3>
+                            <h3 style="color: green; margin-left: 4px;">
+                                : ${PayMentStatus === 'Paid' ? t('Paid') : t('Unpaid')}
+                            </h3>
+                        </div>
+                    </div>
+
+                    <!-- Trip Details -->
+                    <div class="col-md-6">
+                        <div class="bg-light p-3">
+                            <h4>${t('Trip Details')}</h4>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p style="color: #E07026;">${t('Program Name')}</p>
+                                <p>${ProgramName}</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p style="color: #E07026;">${t('Program Year')}</p>
+                                <p>${PROG_YEAR}</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p style="color: #E07026;">${t('Date')}</p>
+                                <p>${new Date(tripDate).toLocaleDateString('en-GB')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price Details -->
+                    <div class="col-md-6">
+                        <div class="bg-light p-3">
+                            <h4>${t('Trip Details')}</h4>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p style="color: #E07026;">${t('Customer Name')}</p>
+                                <p>${customerName}</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p style="color: #E07026;">${t('Reservation No')}</p>
+                                <p>${reservationNo}</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <p style="color: #E07026;">${t('Total Price')}</p>
+                                <p>${totalPayment} ${Currany}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <script>
-            window.onload = function () {
-                window.print();
-            }
+                window.onload = function() {
+                    setTimeout(function() {
+                        window.print();
+                    }, 500);
+                }
             </script>
         </body>
         </html>
@@ -110,7 +205,6 @@ const ReservationItem: FunctionComponent<Props> = ({
                 <div className="row" style={{ height: '100%' }}>
                     <div className="col-md-12 card reservation-card p-3">
                         <div className="row" style={{ height: '100%' }}>
-                            {/* الصورة */}
                             <div
                                 className="col-12 col-lg-6"
                                 style={{
@@ -137,7 +231,6 @@ const ReservationItem: FunctionComponent<Props> = ({
                                 </div>
                             </div>
 
-                            {/* المحتوى */}
                             <div ref={printRef} className="col-12 col-lg-6 card-body">
                                 <Typography variant="body1">
                                     <span style={labelStyle}>{t('Customer Name')} : </span>
@@ -198,7 +291,7 @@ const ReservationItem: FunctionComponent<Props> = ({
                                         )}
                                     </Button>
 
-                                    {PayMentStatus !== 'Paid' && (
+                                    {/* {PayMentStatus !== 'Paid' && (
                                         <Button
                                             className="m-1"
                                             size="small"
@@ -207,7 +300,7 @@ const ReservationItem: FunctionComponent<Props> = ({
                                         >
                                             {t('Cancel')}
                                         </Button>
-                                    )}
+                                    )} */}
                                 </Stack>
                             </div>
                         </div>
