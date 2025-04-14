@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import Logo from '@/assets/images/misr-tour.jpg';
+import Logo from '@/assets/images/logo-misr.png';
 import LogoTouf from '@/assets/images/logo_en.webp';
 
 interface Props {
@@ -191,7 +191,10 @@ const ReservationItem: FunctionComponent<Props> = ({
         </html>
         `;
 
-        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        const width = window.screen.width;
+        const height = window.screen.height;
+
+        const printWindow = window.open('', '_blank', `width=${width},height=${height}`);
         if (printWindow) {
             printWindow.document.open();
             printWindow.document.write(content);

@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 import FacebookSharpIcon from '@mui/icons-material/FacebookSharp';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import EmailIcon from '@mui/icons-material/Email';
+
 interface Props {}
 
 const Index: FunctionComponent<Props> = () => {
@@ -38,15 +40,19 @@ const Index: FunctionComponent<Props> = () => {
                                 <Typography variant="subtitle1">{t('About Us')}</Typography>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href="/ContactUs">{t('Contact Us')}</Link>
+                                <Link href={'/ContactUs'}>{t('Contact Us')}</Link>
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <Link href={''}>{t('Cities')}</Link>
+                                <Link href={'/Suggestion'}>{t('Complaint and Suggestion')}</Link>
+                            </Box>
+                            <Box sx={{ mb: 2 }}>
+                                <Link href={'/wishlist'}>{t('My WishList')}</Link>{' '}
                             </Box>
                         </Grid>
 
                         {/* Information Section */}
-                        <Grid item xs={12} sm={6} md={3}>
+
+                        {/* <Grid item xs={12} sm={6} md={3}>
                             <Box sx={{ mb: 2 }}>
                                 <Typography variant="subtitle1">{t('Information')}</Typography>
                             </Box>
@@ -59,7 +65,7 @@ const Index: FunctionComponent<Props> = () => {
                             <Box sx={{ mb: 2 }}>
                                 <Link href={''}>{t('Goals')}</Link>
                             </Box>
-                        </Grid>
+                            </Grid> */}
 
                         {/* Related Links Section */}
                         <Grid item xs={12} sm={6} md={3}>
@@ -81,7 +87,7 @@ const Index: FunctionComponent<Props> = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    {t(' experience egypt')}
+                                    {t('experience egypt')}
                                 </a>
                             </Box>
                             <Box sx={{ mb: 2 }}>
@@ -110,6 +116,50 @@ const Index: FunctionComponent<Props> = () => {
                                 >
                                     {t('Tourism and Hotels Holding Company')}
                                 </a>
+                            </Box>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} md={3}>
+                            <Box>
+                                <Typography>
+                                    <EmailIcon /> {t('Mail')} :
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                    <a href="mailto:info@toufwshouf.travel">
+                                        info@toufwshouf.travel
+                                    </a>
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <Box sx={{ my: 2 }}>
+                                    <Typography variant="subtitle1">{t('Social media')}</Typography>
+                                </Box>
+                                <Stack direction="row" alignItems="center" spacing={2}>
+                                    <LinkMui
+                                        href="#"
+                                        target="_blank"
+                                        underline="none"
+                                        sx={{ color: 'body.light' }}
+                                    >
+                                        <FacebookSharpIcon />
+                                    </LinkMui>
+                                    <LinkMui
+                                        href="#"
+                                        target="_blank"
+                                        underline="none"
+                                        sx={{ color: 'body.light' }}
+                                    >
+                                        <InstagramIcon />
+                                    </LinkMui>
+                                    <LinkMui
+                                        href="#"
+                                        target="_blank"
+                                        underline="none"
+                                        sx={{ color: 'body.light' }}
+                                    >
+                                        <TwitterIcon />
+                                    </LinkMui>
+                                </Stack>
                             </Box>
                         </Grid>
 
@@ -149,39 +199,6 @@ const Index: FunctionComponent<Props> = () => {
                                         </Button>
                                     </Stack>
                                 </div>
-                                <Box>
-                                    <Box sx={{ mb: 2 }}>
-                                        <Typography variant="subtitle1">
-                                            {t('Social media')}
-                                        </Typography>
-                                    </Box>
-                                    <Stack direction="row" alignItems="center" spacing={2}>
-                                        <LinkMui
-                                            href="#"
-                                            target="_blank"
-                                            underline="none"
-                                            sx={{ color: 'body.light' }}
-                                        >
-                                            <FacebookSharpIcon />
-                                        </LinkMui>
-                                        <LinkMui
-                                            href="#"
-                                            target="_blank"
-                                            underline="none"
-                                            sx={{ color: 'body.light' }}
-                                        >
-                                            <InstagramIcon />
-                                        </LinkMui>
-                                        <LinkMui
-                                            href="#"
-                                            target="_blank"
-                                            underline="none"
-                                            sx={{ color: 'body.light' }}
-                                        >
-                                            <TwitterIcon />
-                                        </LinkMui>
-                                    </Stack>
-                                </Box>
                             </Stack>
                         </Grid>
                     </Grid>

@@ -14,7 +14,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import PrintIcon from '@mui/icons-material/Print';
-import Logo from '@/assets/images/misr-tour.jpg';
+import Logo from '@/assets/images/logo-misr.png';
 import LogoTouf from '@/assets/images/logo_en.webp';
 
 interface Props {}
@@ -169,7 +169,7 @@ const Success: FunctionComponent<Props> = () => {
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <p style="color: #E07026;">${t('Date')}</p>
-                                <p>${new Date(TripDate).toLocaleDateString('en-GB')}</p>
+                                <p>${TripDate}</p>
                             </div>
                         </div>
                     </div>
