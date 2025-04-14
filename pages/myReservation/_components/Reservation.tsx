@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import Logo from '@/assets/images/misr-logo.JPG';
+import Logo from '@/assets/images/misr-tour.jpg';
 import LogoTouf from '@/assets/images/logo_en.webp';
 
 interface Props {

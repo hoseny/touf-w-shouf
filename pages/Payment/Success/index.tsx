@@ -14,7 +14,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import PrintIcon from '@mui/icons-material/Print';
-import Logo from '@/assets/images/misr-logo.JPG';
+import Logo from '@/assets/images/misr-tour.jpg';
 import LogoTouf from '@/assets/images/logo_en.webp';
 
 interface Props {}
