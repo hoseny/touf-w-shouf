@@ -152,6 +152,7 @@ const Index: NextPage<Props> = () => {
                             <LocationAndPriceAndTime
                                 time={`${productData.day} ${t('days')}`}
                                 location={productData.City}
+                                TourType={productData.TourType}
                                 price={productData.StartPrice || t('Price Not Available')}
                             />
                         </>

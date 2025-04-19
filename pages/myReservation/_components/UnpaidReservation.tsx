@@ -46,23 +46,31 @@ const UnpaidReservation = () => {
         <div>
             <Container maxWidth="lg">
                 <Grid container sx={{ my: 4 }}>
-                    <Grid container spacing={2}>
-                        {reservations.map((reservation: Reservation) => (
-                            <Grid item xs={12} sm={6} key={reservation.ReservationNo}>
-                                <ReservationItem
-                                    customerName={reservation.CustomerName}
-                                    IMG_Path={reservation.IMG_Path}
-                                    tripDate={reservation.DateTrip}
-                                    reservationNo={reservation.ReservationNo}
-                                    totalPayment={reservation.TotalPayMent}
-                                    Currany={reservation.Currany}
-                                    PROG_YEAR={reservation.PROG_YEAR}
-                                    ProgramName={reservation.ProgramName}
-                                    PayMentStatus={reservation.PayMentStatus}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
+                    {reservations.length === 0 ? (
+                        <Grid item xs={12}>
+                            <Typography variant="h6" align="center" sx={{ py: 4 }}>
+                                {t('No data available')}
+                            </Typography>
+                        </Grid>
+                    ) : (
+                        <Grid container spacing={2}>
+                            {reservations.map((reservation: Reservation) => (
+                                <Grid item xs={12} sm={6} key={reservation.ReservationNo}>
+                                    <ReservationItem
+                                        customerName={reservation.CustomerName}
+                                        IMG_Path={reservation.IMG_Path}
+                                        tripDate={reservation.DateTrip}
+                                        reservationNo={reservation.ReservationNo}
+                                        totalPayment={reservation.TotalPayMent}
+                                        Currany={reservation.Currany}
+                                        PROG_YEAR={reservation.PROG_YEAR}
+                                        ProgramName={reservation.ProgramName}
+                                        PayMentStatus={reservation.PayMentStatus}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
                 </Grid>
             </Container>
         </div>

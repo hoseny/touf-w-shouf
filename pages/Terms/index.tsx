@@ -7,13 +7,12 @@ import { useTranslation } from 'react-i18next';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Image from 'next/image';
-import logo from '@/assets/images/misr-tour.jpg';
+import { useRouter } from 'next/router';
 
 const Suggestion = () => {
     const { t } = useTranslation();
+    const router = useRouter();
 
     return (
         <div>
@@ -46,12 +45,19 @@ const Suggestion = () => {
                     }}
                 >
                     <h3 style={{ lineHeight: '1.8' }}>
-                        By using our hotel booking services, you agree to provide accurate
-                        information, adhere to the hotel’s booking and cancellation policies, take
-                        full responsibility for any additional fees or damages, and acknowledge that
-                        the site is not liable for any losses or changes due to unforeseen
-                        circumstances.
+                        {t(
+                            'By using our hotel booking services, you agree to provide accurate information, adhere to the hotel’s booking and cancellation policies, take full responsibility for any additional fees or damages, and acknowledge that the site is not liable for any losses or changes due to unforeseen circumstances'
+                        )}
                     </h3>
+
+                    <Button
+                        className="mt-5"
+                        variant="contained"
+                        size="large"
+                        onClick={() => router.back()}
+                    >
+                        {t('back to booking')}
+                    </Button>
                 </Grid>
             </Container>
         </div>

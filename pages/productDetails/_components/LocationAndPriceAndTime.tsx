@@ -10,8 +10,9 @@ interface Props {
     time: string;
     price: number;
     location: string;
+    TourType: string;
 }
-const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, location }) => {
+const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, TourType, location }) => {
     const { t } = useTranslation();
 
     return (
@@ -47,7 +48,10 @@ const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, locati
                 >
                     {/* <AttachMoneyIcon /> */}
                     <Stack direction="row" spacing={0.5}>
-                        <Typography variant="body1"> {t('Start Price')}:</Typography>
+                        {/* <Typography variant="body1"> {t('Start Price')}:</Typography> */}
+                        <Typography variant="body1">
+                            {TourType === 'Package' ? t('Start Price p/p') : t('Price')}
+                        </Typography>
                         <Typography variant="subtitle1" sx={{ color: 'body.main' }}>
                             {price ? t(`${price}`) : t('Price Not Available')} {t('EGP')}
                         </Typography>
