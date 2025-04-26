@@ -10,6 +10,7 @@ import { useLazyGetVoucherQuery } from '@/store/Reservation/FetchVoucher';
 import Loading from '@/components/Loading/Loading';
 import Swal from 'sweetalert2';
 import { useGetPaymentQuery } from '@/store/Reservation/FetchPaymentApi';
+import { log } from 'console';
 
 interface GeideaData {
     responseCode: string;
@@ -23,6 +24,8 @@ interface GeideaData {
 interface Props {
     customerName: string;
     tripDate: string;
+    ReservationRef: string;
+    CustomerRef: number;
     reservationNo: number;
     PayMentStatus: string;
     totalPayment: string;
@@ -51,10 +54,12 @@ interface Props {
 const ReservationItem: FunctionComponent<Props> = ({
     customerName,
     tripDate,
+    CustomerRef,
     reservationNo,
     PayMentStatus,
     totalPayment,
     Currany,
+    ReservationRef,
     PROG_YEAR,
     ProgramName,
     IMG_Path,
@@ -80,19 +85,14 @@ const ReservationItem: FunctionComponent<Props> = ({
         }
     }, []);
 
-    const { data: paymentAllData } = useGetPaymentQuery(ref && sp ? { ref, sp } : undefined, {
-        skip: !ref || !sp,
-    });
-
-    const paymentData = paymentAllData?.items || [];
-    const customerRef = paymentData[0]?.['Customerref :'] || customer_ref;
-    const reservationRef = paymentData[0]?.['reservationRef '] || ref;
-    const reservationsp = paymentData[0]?.['reservationsp '] || sp;
-    const total = paymentData[0]?.['Total '] || 0;
-    const totalWithVat = paymentData[0]?.['TheTotalincludesVat '] || 0;
-
     const [triggerVoucherQuery, { data, isLoading: isVoucherLoading, error: voucherError }] =
         useLazyGetVoucherQuery();
+    const customerRef = CustomerRef;
+
+    const reservationRef = ReservationRef;
+    const reservationsp = reservationNo;
+    // const total = totalPayment || 0;
+    const totalWithVat = totalPayment || 0;
 
     const handlePrintWindow = () => {
         const logoPath = typeof Logo === 'string' ? Logo : Logo.src;
@@ -602,7 +602,7 @@ const ReservationItem: FunctionComponent<Props> = ({
     // Start payment
     const startPayment = async () => {
         setIsLoading(true);
-        if (!reservationRef || !customerRef || !total) {
+        if (!reservationRef || !customerRef || !totalWithVat) {
             Swal.fire({
                 icon: 'error',
                 title: t('Missing Information'),
