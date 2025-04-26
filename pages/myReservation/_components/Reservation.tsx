@@ -6,7 +6,9 @@ import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import Logo from '@/assets/images/logo-misr.png';
 import LogoTouf from '@/assets/images/logo_en.webp';
-
+import { useGetVoucherQuery, useLazyGetVoucherQuery } from '@/store/Reservation/FetchVoucher';
+import CircularProgress from '@mui/material/CircularProgress';
+import Loading from '@/components/Loading/Loading';
 interface Props {
     customerName: string;
     tripDate: string;
@@ -18,7 +20,6 @@ interface Props {
     IMG_Path: string;
     PROG_YEAR: number;
     priority?: boolean;
-    // Add these new props for the additional details
     phone?: string;
     email?: string;
     numberOfAdults?: number;
@@ -46,28 +47,15 @@ const ReservationItem: FunctionComponent<Props> = ({
     PROG_YEAR,
     ProgramName,
     IMG_Path,
-    priority = false,
-    phone = '',
-    email = '',
-    numberOfAdults = 0,
-    numberOfChildrenUnder6 = 0,
-    numberOfChildrenBetween6And12 = 0,
-    TheNumberOfCHILDFROM6TO12DayUseX = 0,
-    TheNumberOfADULTINSINGLEX = 0,
-    TheNumberOfADULTINDOUBLEX = 0,
-    TheNumberOfADULTINTRIPLEX = 0,
-    TheNumberOfADULTINSUITEX = 0,
-    TheNumberOfADULTINQUARTERX = 0,
-    totalAdditionalService = '0',
-    totalWithoutAdditionalService = '0',
-    vat = '0',
-    totalWithVat = '0',
 }) => {
     const labelStyle = {
         color: '#E07026',
     };
     const { t } = useTranslation();
     const printRef = useRef<HTMLDivElement>(null);
+
+    const [triggerVoucherQuery, { data, isLoading: isVoucherLoading, error: voucherError }] =
+        useLazyGetVoucherQuery();
 
     const handlePrintWindow = () => {
         const logoPath = typeof Logo === 'string' ? Logo : Logo.src;
@@ -226,431 +214,270 @@ const ReservationItem: FunctionComponent<Props> = ({
         }
     };
 
-    // const handlePrintWindow = () => {
-    //     const logoPath = typeof Logo === 'string' ? Logo : Logo.src;
-    //     const logoPathTouf = typeof LogoTouf === 'string' ? LogoTouf : LogoTouf.src;
+    const handlePrintVoucher = async () => {
+        try {
+            const { data } = await triggerVoucherQuery(reservationNo);
+            const voucher = data?.Voucher?.[0];
 
-    //     const content = `
-    //     <html>
-    //     <head>
-    //         <title>Invoice</title>
-    //         <style>
-    //             body {
-    //                 font-family: Arial, sans-serif;
-    //                 padding: 20px;
-    //                 margin: 0;
-    //                 background-color: #fff;
-    //             }
-    //             .invoice-container {
-    //                 max-width: 800px;
-    //                 margin: 0 auto;
-    //             }
-    //             .header {
-    //                 display: flex;
-    //                 justify-content: space-between;
-    //                 margin-bottom: 30px;
-    //             }
-    //             .logo {
-    //                 max-width: 150px;
-    //                 height: auto;
-    //             }
-    //             .invoice-info {
-    //                 text-align: right;
-    //             }
-    //             .invoice-title {
-    //                 font-size: 24px;
-    //                 font-weight: bold;
-    //                 margin-bottom: 5px;
-    //             }
-    //             .invoice-number {
-    //                 font-size: 18px;
-    //                 margin-bottom: 5px;
-    //             }
-    //             .invoice-date {
-    //                 margin-bottom: 20px;
-    //             }
-    //             .billing-info {
-    //                 display: flex;
-    //                 justify-content: space-between;
-    //                 margin-bottom: 20px;
-    //             }
-    //             .bill-to, .service-for {
-    //                 width: 48%;
-    //             }
-    //             .section-title {
-    //                 font-weight: bold;
-    //                 margin-bottom: 10px;
-    //                 color: #E07026;
-    //             }
-    //             table {
-    //                 width: 100%;
-    //                 border-collapse: collapse;
-    //                 margin: 20px 0;
-    //             }
-    //             th {
-    //                 text-align: left;
-    //                 padding: 10px;
-    //                 background-color: #f5f5f5;
-    //                 border-bottom: 1px solid #ddd;
-    //             }
-    //             td {
-    //                 padding: 10px;
-    //                 border-bottom: 1px solid #eee;
-    //             }
-    //             .text-right {
-    //                 text-align: right;
-    //             }
-    //             .totals {
-    //                 margin-top: 20px;
-    //                 width: 300px;
-    //                 margin-left: auto;
-    //             }
-    //             .total-row {
-    //                 display: flex;
-    //                 justify-content: space-between;
-    //                 margin-bottom: 10px;
-    //             }
-    //             .footer {
-    //                 margin-top: 40px;
-    //                 font-size: 0.9em;
-    //                 color: #666;
-    //             }
-    //             .thank-you {
-    //                 text-align: center;
-    //                 font-size: 1.2em;
-    //                 font-weight: bold;
-    //                 margin-top: 30px;
-    //             }
-    //             @media print {
-    //                 body { padding: 0; }
-    //                 button { display: none; }
-    //             }
-    //         </style>
-    //     </head>
-    //     <body>
-    //         <div class="invoice-container">
-    //             <div class="header">
-    //                 <div>
-    //                     <img src="${logoPath}" alt="Logo" class="logo" />
-    //                 </div>
-    //                 <div class="invoice-info">
-    //                     <div class="invoice-title">INVOICE</div>
-    //                     <div class="invoice-number"># ${reservationNo}</div>
-    //                     <div class="invoice-date">Date: ${new Date().toLocaleDateString('en-GB')}</div>
-    //                 </div>
-    //             </div>
-
-    //             <div class="billing-info">
-    //                 <div class="bill-to">
-    //                     <div class="section-title">BILL TO</div>
-    //                     <div>${customerName}</div>
-    //                     <div>${phone || email}</div>
-    //                 </div>
-    //                 <div class="service-for">
-    //                     <div class="section-title">FOR</div>
-    //                     <div>${ProgramName}</div>
-    //                 </div>
-    //             </div>
-
-    //             <table>
-    //                 <thead>
-    //                     <tr>
-    //                         <th>SERVICE DESCRIPTION</th>
-    //                         <th class="text-right">AMOUNT</th>
-    //                     </tr>
-    //                 </thead>
-    //                 <tbody>
-    //                     <tr>
-    //                         <td>${ProgramName} Package (${PROG_YEAR})</td>
-    //                         <td class="text-right">${totalWithoutAdditionalService} ${Currany}</td>
-    //                     </tr>
-    //                     ${totalAdditionalService !== '0' ? `
-    //                     <tr>
-    //                         <td>Additional Services</td>
-    //                         <td class="text-right">${totalAdditionalService} ${Currany}</td>
-    //                     </tr>
-    //                     ` : ''}
-    //                     ${vat !== '0' ? `
-    //                     <tr>
-    //                         <td>Tax (VAT)</td>
-    //                         <td class="text-right">${vat} ${Currany}</td>
-    //                     </tr>
-    //                     ` : ''}
-    //                 </tbody>
-    //             </table>
-
-    //             <div class="totals">
-    //                 <div class="total-row">
-    //                     <span>Subtotal:</span>
-    //                     <span>${totalWithoutAdditionalService} ${Currany}</span>
-    //                 </div>
-    //                 ${totalAdditionalService !== '0' ? `
-    //                 <div class="total-row">
-    //                     <span>Additional costs:</span>
-    //                     <span>${totalAdditionalService} ${Currany}</span>
-    //                 </div>
-    //                 ` : ''}
-    //                 ${vat !== '0' ? `
-    //                 <div class="total-row">
-    //                     <span>Tax rate:</span>
-    //                     <span>${vat} ${Currany}</span>
-    //                 </div>
-    //                 ` : ''}
-    //                 <div class="total-row" style="font-weight: bold; font-size: 1.1em;">
-    //                     <span>TOTAL COST:</span>
-    //                     <span>${totalWithVat || totalPayment} ${Currany}</span>
-    //                 </div>
-    //             </div>
-
-    //             <div class="footer">
-    //                 <p>Make all checks payable to Misr Travel</p>
-    //                 <p>If you have any questions concerning this invoice, use the following contact information:</p>
-    //                 <p>Contact Misr Travel, +2 (02) 23930010, info@misrtravel.net</p>
-    //             </div>
-
-    //             <div class="thank-you">
-    //                 THANK YOU FOR YOUR BUSINESS!
-    //             </div>
-    //         </div>
-
-    //         <script>
-    //             window.onload = function() {
-    //                 setTimeout(function() {
-    //                     window.print();
-    //                 }, 500);
-    //             }
-    //         </script>
-    //     </body>
-    //     </html>
-    //     `;
-
-    //     const printWindow = window.open('', '_blank', 'width=900,height=650');
-    //     if (printWindow) {
-    //         printWindow.document.open();
-    //         printWindow.document.write(content);
-    //         printWindow.document.close();
-    //     }
-    // };
-    const handlePrintVoucher = () => {
-        const logoPath = typeof Logo === 'string' ? Logo : Logo.src;
-
-        const totalTravelers =
-            numberOfAdults + numberOfChildrenUnder6 + numberOfChildrenBetween6And12;
-
-        const includedServices = [
-            'الإقامة في الفندق',
-            'وجبات الإفطار',
-            'جولات سياحية حسب البرنامج',
-            'خدمة نقل من/إلى المطار',
-            'مرشد سياحي',
-            'تأمين صحي',
-        ]
-            .map(service => `<li>${service}</li>`)
-            .join('');
-
-        const content = `
-        <html>
-        <head>
-            <title>Voucher</title>
-            <style>
-                body { 
-                    font-family: Arial, sans-serif; 
-                    padding: 20px; 
-                    margin: 0;
-                    background-color: #fff;
-                }
-                .voucher-container { 
-                    max-width: 800px; 
-                    margin: 0 auto; 
-                    border: 1px solid #ddd;
-                    padding: 20px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                }
-                .header { 
-                    text-align: center; 
-                    margin-bottom: 20px;
-                }
-                .logo { 
-                    max-width: 150px; 
-                    height: auto;
-                }
-                .section { 
-                    margin-bottom: 15px;
-                }
-                .section-title { 
-                    font-weight: bold; 
-                    color: #E07026; 
-                    margin-bottom: 5px;
-                    border-bottom: 1px solid #E07026;
-                    padding-bottom: 3px;
-                }
-                .details-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 10px;
-                }
-                .detail-item {
-                    margin-bottom: 5px;
-                }
-                .detail-label {
-                    font-weight: bold;
-                    color: #555;
-                }
-                .notes {
-                    font-style: italic;
-                    color: #666;
-                }
-                ul {
-                    padding-left: 20px;
-                    margin: 5px 0;
-                }
-                .footer {
-                    text-align: center;
-                    margin-top: 20px;
-                    font-size: 0.9em;
-                    color: #777;
-                }
-                @media print {
-                    body { padding: 0; }
-                    .voucher-container { 
-                        border: none; 
-                        box-shadow: none;
-                    }
-                    button { display: none; }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="voucher-container">
-                <div class="header">
-                    <img src="${logoPath}" alt="Misr Travel Logo" class="logo">
-                </div>
+            if (!voucher) {
+                console.error('No voucher data received');
+                return;
+            }
+            const logoPath = typeof Logo === 'string' ? Logo : Logo.src;
+            const content = `
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Tour Service Voucher</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #000;
+    }
     
-                <div class="section">
-                    <div class="section-title">Tour Service Voucher</div>
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Voucher No.:</span> ${reservationNo}
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Issue Date:</span> ${new Date().toLocaleDateString(
-                                'en-GB'
-                            )}
-                        </div>
-                    </div>
-                </div>
+    .voucher-container {
+      max-width: 1050px;
+      margin: auto;
+      padding: 30px;
+      border: 1px solid #ccc;
+    }
+    .img-div{
+        background-color: #21216e;
+    }
+    .voucher-header {
+      text-align: left;
+      border-bottom: 3px solid #005baa;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
     
-                <div class="section">
-                    <div class="section-title">PASSENGER DETAILS</div>
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Name:</span> ${customerName}
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Contact:</span> ${phone || email}
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">No. of Travelers:</span> ${totalTravelers} (Adults: ${numberOfAdults}, Children: ${
-            numberOfChildrenUnder6 + numberOfChildrenBetween6And12
-        })
-                        </div>
-                    </div>
-                </div>
+    .logo {
+      width: 200px;
+    }
     
-                <div class="section">
-                    <div class="section-title">TRAVEL SERVICE DETAILS</div>
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Service Type:</span> ${ProgramName}
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Destination:</span> [City / Country]
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Service Dates:</span> From ${new Date(
-                                tripDate
-                            ).toLocaleDateString('en-GB')} to [End Date]
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Number of Nights:</span> [Nights]
-                        </div>
-                    </div>
-                </div>
+    .voucher-header h1 {
+      color: #005baa;
+      font-size: 20px;
+      margin-top: 10px;
+    }
     
-                <div class="section">
-                    <div class="section-title">INCLUDED SERVICES</div>
-                    <ul>
-                        ${includedServices}
-                    </ul>
-                </div>
+    .voucher-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 14px;
+    }
     
-                <div class="section">
-                    <div class="section-title">SUPPLIER / SERVICE PROVIDER DETAILS</div>
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Name:</span> [Supplier Name]
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Contact:</span> [Phone / Email]
-                        </div>
-                    </div>
-                </div>
+    .section {
+      margin-bottom: 20px;
+    }
     
-                <div class="section">
-                    <div class="section-title">BOOKING & PAYMENT STATUS</div>
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Booking Reference:</span> ${reservationNo}
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Payment Status:</span> <strong>${
-                                PayMentStatus === 'Paid' ? 'PAID' : 'PENDING'
-                            }</strong>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Issued By:</span> [Employee Name / Booking Agent]
-                        </div>
-                    </div>
-                </div>
+    .section h2 {
+      color: #005baa;
+      font-size: 16px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
     
-                <div class="section">
-                    <div class="section-title">IMPORTANT NOTES</div>
-                    <ul class="notes">
-                        <li>Please present this voucher upon arrival or at the beginning of service.</li>
-                        <li>This voucher is non-transferable and valid only for the services mentioned.</li>
-                        <li>For any issues during travel, please contact our 24/7 support at [Emergency Contact Number].</li>
-                    </ul>
-                </div>
+    .section p, .section li {
+      font-size: 14px;
+      line-height: 1.6;
+    }
     
-                <div class="section" style="text-align: center; font-weight: bold; font-size: 1.2em;">
-                    BON VOYAGE! HAVE A GREAT TRIP!
-                </div>
+    .section ul {
+      list-style: disc;
+      margin-left: 20px;
+    }
     
-                <div class="footer">
-                    <p>(This voucher is issued by Misr Travel as proof of booking and confirmation.)</p>
-                    <p>Misr Travel Tower -- Abbassia Square / 1 Talaat Harb St., Cairo -- Egypt.</p>
-                    <p>Tel: +2 (02) 23930010 | www.misrtravel.net</p>
-                </div>
-            </div>
+    .footer {
+      text-align: center;
+      border-top: 1px solid #ccc;
+      padding-top: 15px;
+      margin-top: 30px;
+      font-size: 14px;
+    }
     
-            <script>
-                window.onload = function() {
-                    setTimeout(function() {
-                        window.print();
-                    }, 500);
-                }
-            </script>
-        </body>
-        </html>
+    .footer a {
+      color: #005baa;
+      text-decoration: none;
+    }
+    
+    .blue {
+      color: #005baa;
+    }
+    
+    @media print {
+      body { 
+        padding: 10px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .img-div {
+        background-color: #21216e !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .logo {
+        width: 200px;
+        height: auto;
+      }
+    }
+    
+    </style>
+      </head>
+    <body>
+      <div class="voucher-container">
+        <header class="voucher-header">
+        <div class="img-div">
+        <img src="${logoPath}" alt="Misr Travel Logo" class="logo">
+          </div>
+          <h1>Tour Service Voucher</h1>
+          <div class="voucher-meta">
+            <span>Voucher No.: <strong style="Color:red">${voucher.VoucherNo}</strong></span>
+            <span>Issue Date: <strong style="Color:red">${voucher.IssueDate}</strong></span>
+          </div>
+        </header>
+    
+        <section class="section">
+          <h2>PASSENGER DETAILS</h2>
+          <p>Name: <strong style="Color:red">${voucher.CustomerName}</strong></p>
+          <p>Contact: [ Phone: <strong style="Color:red">${
+              voucher.Phone
+          }</strong> / Email: <strong style="Color:red">${voucher.EMail}</strong> ]</p>
+<p><strong>No. of Travelers:</strong> [
+  ${voucher.AdultNo > 0 ? `<span style="color:red">${voucher.AdultNo} Adults</span>` : ''}
+  ${voucher.AdultNo > 0 && voucher.ChildNo > 0 ? `<span style="color:black"> / </span>` : ''}
+  ${voucher.ChildNo > 0 ? `<span style="color:red">${voucher.ChildNo} Children</span>` : ''}
+]</p>        </section>
+    
+        <section class="section">
+          <h2>TRAVEL SERVICE DETAILS</h2>
+          <p><strong>Service Type:</strong> ${voucher.ServiceType}</p>
+          <p><strong>Destination:</strong> [ <span style="color:red">${
+              voucher.City || 'Not Found'
+          }</span> / <span style="color:red">${voucher.Country}</span> ]</p>
+          <p><strong>Service Dates:</strong> From [ <span style="color:red">${new Date(
+              voucher.DateStart
+          ).toLocaleDateString('en-GB')}</span> ] to [ <span style="color:red">${new Date(
+                voucher.DateEnd
+            ).toLocaleDateString('en-GB')}</span> ]</p>
+          <p><strong>Number of Nights:</strong> [ <span style="color:red">${
+              voucher.NightCount
+          }</span> ]</p>
+        </section>
+                 
+       <section class="section">
+  <h2>INCLUDED SERVICES</h2>
+  <ul>
+    ${
+        voucher.INCLUDEDSERVICE && voucher.INCLUDEDSERVICE.length > 0
+            ? voucher.INCLUDEDSERVICE.map((service: { [x: string]: string }) => {
+                  // Check each possible service type
+                  if (service['Hotel ']) {
+                      return `<li>Accommodation at the <strong>${service['Hotel ']
+                          .replace('Accommodation at the', '')
+                          .trim()}</strong></li>`;
+                  }
+                  if (service['siteseeing ']) {
+                      return `<li>Site seeing: <strong>${service['siteseeing ']
+                          .replace('site seeing at the', '')
+                          .trim()}</strong></li>`;
+                  }
+                  if (service['Transport ']) {
+                      return `<li>Transportation by <strong>${service['Transport ']
+                          .replace('Transfar By', '')
+                          .trim()}</strong></li>`;
+                  }
+                  return '<li>Service details not Found</li>';
+              }).join('')
+            : '<li>No included services Found</li>'
+    }
+  </ul>
+</section>
+        <section class="section">
+          <h2>SUPPLIER / SERVICE PROVIDER DETAILS</h2>
+          ${
+              voucher.Providers && voucher.Providers.length > 0
+                  ? voucher.Providers.map(
+                        (provider: { ProviderName: string; Phone: string; Email: string }) =>
+                            `<p><strong>Name:</strong> <span style="color:red">${
+                                provider.ProviderName || 'Not Found'
+                            }</span></p>
+                 <p><strong>Contact:</strong> [ Phone: <span style="color:red">${
+                     provider.Phone || 'Not Found'
+                 }</span> / Email: <span style="color:red">${
+                                provider.Email || 'Not Found'
+                            }</span> ]</p>`
+                    ).join('')
+                  : '<p>Provider details not Found</p>'
+          }
+        </section>
+        
+        <section class="section">
+          <h2>BOOKING & PAYMENT STATUS</h2>
+          <p><strong>Booking Reference:</strong> <span style="color:red">${
+              voucher.BookingReference
+          }</span></p>
+          <p><strong>Payment Status:</strong> <span style="color:red">PAID</span></p>
+          <p><strong>Issued By:</strong> <span style="color:red">Online Reservation</span></p>
+        </section>
+    
+        <section class="section">
+          <h2>IMPORTANT NOTES</h2>
+          <ul>
+            <li>Please present this voucher upon arrival or at the beginning of service.</li>
+            <li>This voucher is non-transferable and valid only for the services mentioned.</li>
+            <li>For any issues during travel, please contact our 24/7 support 19341 .</li>
+          </ul>
+        </section>
+    
+        <section class="section">
+          <h2 class="blue">BON VOYAGE! HAVE A GREAT TRIP!</h2>
+          <p><em>(This voucher is issued by Misr Travel as proof of booking and confirmation.)</em></p>
+        </section>
+    
+        <footer class="footer">
+          <p>Misr Travel Tower – Abbassia Square / 1 Talaat Harb St., Cairo – Egypt.</p>
+          <p>Tel: +2 (02) 23930010 | <a href="http://www.misrtravel.net" target="_blank">www.misrtravel.net</a></p>
+        </footer>
+      </div>
+
+      <script>
+        function triggerPrint() {
+          setTimeout(function() {
+            window.print();
+            window.onafterprint = function() {
+              window.close();
+            };
+          }, 500); 
+        }
+        
+        if (document.readyState === 'complete') {
+          triggerPrint();
+        } else {
+          window.addEventListener('load', triggerPrint);
+        }
+      </script>
+    </body>
+    </html>
         `;
 
-        const width = window.screen.width;
-        const height = window.screen.height;
-        const printWindow = window.open('', '_blank', `width=${width},height=${height}`);
-        if (printWindow) {
-            printWindow.document.open();
-            printWindow.document.write(content);
-            printWindow.document.close();
+            const width = window.screen.width;
+            const height = window.screen.height;
+            const printWindowVoucher = window.open('', '_blank', `width=${width},height=${height}`);
+            if (printWindowVoucher) {
+                printWindowVoucher.document.open();
+                printWindowVoucher.document.write(content);
+                printWindowVoucher.document.close();
+            }
+        } catch (err) {
+            console.error('Error fetching voucher:', err);
         }
     };
 
@@ -750,8 +577,15 @@ const ReservationItem: FunctionComponent<Props> = ({
                                         size="small"
                                         variant="contained"
                                         onClick={handlePrintVoucher}
+                                        disabled={isVoucherLoading || PayMentStatus !== 'Paid'}
                                     >
-                                        {t(PayMentStatus === 'Paid' ? 'print voucher' : '')}
+                                        {isVoucherLoading ? (
+                                            <>
+                                                {t('Loading...')} <Loading />
+                                            </>
+                                        ) : (
+                                            t(PayMentStatus === 'Paid' ? 'Print Voucher' : '')
+                                        )}
                                     </Button>
                                 </Stack>
                             </div>

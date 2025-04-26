@@ -46,6 +46,7 @@ import { fetchLogoSlice } from './Home/LogoSlice';
 import { FetchDayUseEnApi } from './Products/FetchDayUseEnApi';
 import { FetchVideo } from './Products/FetchVideo';
 import { FetchTourExcludingArApi } from './Products/ProgramDetailsAR/FetchTourExcludingArApi';
+import { FetchVoucher } from './Reservation/FetchVoucher';
 
 export const store = configureStore({
     reducer: {
@@ -96,6 +97,7 @@ export const store = configureStore({
         [fetchLogoSlice.reducerPath]: fetchLogoSlice.reducer,
         [FetchVideo.reducerPath]: FetchVideo.reducer,
         [FetchTourExcludingArApi.reducerPath]: FetchTourExcludingArApi.reducer,
+        [FetchVoucher.reducerPath]: FetchVoucher.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware()
@@ -142,6 +144,7 @@ export const store = configureStore({
             .concat(FetchUnPaidReservation.middleware)
             .concat(FetchInvoiceById.middleware)
             .concat(FetchTourExcludingApi.middleware)
+            .concat(FetchVoucher.middleware)
             .concat(fetchLogoSlice.middleware),
 });
 
