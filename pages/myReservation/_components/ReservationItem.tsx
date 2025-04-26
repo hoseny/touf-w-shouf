@@ -73,17 +73,17 @@ const ReservationItem: FunctionComponent<Props> = ({
     const [ref, setRef] = useState<string | null>(null);
     const [sp, setSp] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const customer_ref = typeof window !== 'undefined' ? localStorage.getItem('custcode') : null;
+    // const customer_ref = typeof window !== 'undefined' ? localStorage.getItem('custcode') : null;
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const refNo = sessionStorage.getItem('ref_no');
-            const resSp = sessionStorage.getItem('Res_sp');
+    // useEffect(() => {
+    //     if (typeof window !== 'undefined') {
+    //         const refNo = sessionStorage.getItem('ref_no');
+    //         const resSp = sessionStorage.getItem('Res_sp');
 
-            if (refNo) setRef(refNo);
-            if (resSp) setSp(resSp);
-        }
-    }, []);
+    //         if (refNo) setRef(refNo);
+    //         if (resSp) setSp(resSp);
+    //     }
+    // }, []);
 
     const [triggerVoucherQuery, { data, isLoading: isVoucherLoading, error: voucherError }] =
         useLazyGetVoucherQuery();
@@ -581,6 +581,7 @@ const ReservationItem: FunctionComponent<Props> = ({
 
     // Handle payment error
     const onError = (data: GeideaData) => {
+        setIsLoading(false);
         Swal.fire({
             icon: 'error',
             title: t('Payment Failed'),
@@ -593,6 +594,7 @@ const ReservationItem: FunctionComponent<Props> = ({
 
     // Handle payment cancellation
     const onCancel = () => {
+        setIsLoading(false);
         Swal.fire({
             icon: 'warning',
             title: t('Payment Cancelled'),
@@ -750,7 +752,13 @@ const ReservationItem: FunctionComponent<Props> = ({
                                                 variant="contained"
                                                 onClick={startPayment}
                                             >
-                                                {t('Pay Now')}
+                                                {isLoading ? (
+                                                    <>
+                                                        {t('Loading...')} <Loading />
+                                                    </>
+                                                ) : (
+                                                    t('Pay Now')
+                                                )}
                                             </Button>
                                         </>
                                     )}
