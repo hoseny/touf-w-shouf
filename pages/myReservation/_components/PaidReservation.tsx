@@ -53,9 +53,11 @@ const UnpaidReservation = () => {
                                         customerName={reservation.CustomerName}
                                         IMG_Path={reservation.IMG_Path}
                                         tripDate={reservation.DateTrip}
+                                        CustomerRef={reservation.CustomerID}
                                         reservationNo={reservation.ReservationNo}
                                         totalPayment={reservation.TotalPayMent}
                                         Currany={reservation.Currany}
+                                        ReservationRef={reservation.ReservationReferrance}
                                         PROG_YEAR={reservation.PROG_YEAR}
                                         ProgramName={reservation.ProgramName}
                                         PayMentStatus={reservation.PayMentStatus}
