@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -6,9 +6,20 @@ import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import Logo from '@/assets/images/logo-misr.png';
 import LogoTouf from '@/assets/images/logo_en.webp';
-import { useGetVoucherQuery, useLazyGetVoucherQuery } from '@/store/Reservation/FetchVoucher';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useLazyGetVoucherQuery } from '@/store/Reservation/FetchVoucher';
 import Loading from '@/components/Loading/Loading';
+import Swal from 'sweetalert2';
+import { useGetPaymentQuery } from '@/store/Reservation/FetchPaymentApi';
+
+interface GeideaData {
+    responseCode: string;
+    responseMessage: string;
+    detailedResponseCode: string;
+    detailedResponseMessage: string;
+    orderId: string;
+    reference: string;
+}
+
 interface Props {
     customerName: string;
     tripDate: string;
@@ -52,7 +63,33 @@ const ReservationItem: FunctionComponent<Props> = ({
         color: '#E07026',
     };
     const { t } = useTranslation();
+
     const printRef = useRef<HTMLDivElement>(null);
+    const [ref, setRef] = useState<string | null>(null);
+    const [sp, setSp] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const customer_ref = typeof window !== 'undefined' ? localStorage.getItem('custcode') : null;
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const refNo = sessionStorage.getItem('ref_no');
+            const resSp = sessionStorage.getItem('Res_sp');
+
+            if (refNo) setRef(refNo);
+            if (resSp) setSp(resSp);
+        }
+    }, []);
+
+    const { data: paymentAllData } = useGetPaymentQuery(ref && sp ? { ref, sp } : undefined, {
+        skip: !ref || !sp,
+    });
+
+    const paymentData = paymentAllData?.items || [];
+    const customerRef = paymentData[0]?.['Customerref :'] || customer_ref;
+    const reservationRef = paymentData[0]?.['reservationRef '] || ref;
+    const reservationsp = paymentData[0]?.['reservationsp '] || sp;
+    const total = paymentData[0]?.['Total '] || 0;
+    const totalWithVat = paymentData[0]?.['TheTotalincludesVat '] || 0;
 
     const [triggerVoucherQuery, { data, isLoading: isVoucherLoading, error: voucherError }] =
         useLazyGetVoucherQuery();
@@ -481,6 +518,121 @@ const ReservationItem: FunctionComponent<Props> = ({
         }
     };
 
+    // fetch check out id
+    const fetchPaymentData = async (): Promise<any> => {
+        try {
+            setIsLoading(true);
+            // const urlTrue = 'http://localhost:3000/Payment/Success';
+            // const urlFalse = 'http://localhost:3000/Payment/Failed';
+            // const urlTrue = 'https://touf-we-shouf.vercel.app/Payment/Success';
+            // const urlFalse = 'https://touf-we-shouf.vercel.app/Payment/Failed';
+            const urlTrue = 'https://www.toufwshouf.travel/Payment/Success';
+            const urlFalse = 'https://www.toufwshouf.travel/Payment/Failed';
+            const accessType = 'Web';
+            const custRef = customerRef;
+            const invNo = reservationsp;
+            const invAmount = totalWithVat;
+            const appSession =
+                typeof window !== 'undefined' ? localStorage.getItem('token') : '123456';
+            // const appSession = '123456';
+
+            const url = `https://app.misrtravelco.net:4444/ords/invoice/public/GetCheckOut?urlFalse=${urlFalse}&urlTrue=${urlTrue}&accessType=${accessType}&custRef=${custRef}&invNo=${invNo}&invAmount=${invAmount}&appSession=${appSession}`;
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                setIsLoading(false);
+                throw new Error('Failed to fetch payment data');
+            }
+            return await response.json();
+        } catch (error: any) {
+            setIsLoading(false);
+            const errMessage = error.response?.data?.errMessage || 'Unexpected error occurred';
+            console.error(errMessage);
+            Swal.fire(errMessage);
+        }
+    };
+
+    //add Geidea
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://www.merchant.geidea.net/hpp/geideaCheckout.min.js';
+        script.async = true;
+        script.onload = () => console.log('GeideaCheckout script loaded successfully');
+        script.onerror = () => console.error('Failed to load GeideaCheckout script');
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
+    // Handle payment success
+    const onSuccess = (data: GeideaData) => {
+        Swal.fire({
+            icon: 'success',
+            title: t('Payment Successful'),
+            html: `
+            <strong>${t('Response Code')}:</strong> ${data.responseCode}<br />
+            <strong>${t('Order ID')}:</strong> ${data.orderId}
+            `,
+        });
+    };
+
+    // Handle payment error
+    const onError = (data: GeideaData) => {
+        Swal.fire({
+            icon: 'error',
+            title: t('Payment Failed'),
+            html: `
+            <strong>${t('Response Code')}:</strong> ${data.responseCode}<br />
+            <strong>${t('Order ID')}:</strong> ${data.orderId}
+            `,
+        });
+    };
+
+    // Handle payment cancellation
+    const onCancel = () => {
+        Swal.fire({
+            icon: 'warning',
+            title: t('Payment Cancelled'),
+        });
+    };
+
+    // Start payment
+    const startPayment = async () => {
+        setIsLoading(true);
+        if (!reservationRef || !customerRef || !total) {
+            Swal.fire({
+                icon: 'error',
+                title: t('Missing Information'),
+                text: t('Please make sure all payment details are filled out correctly.'),
+            });
+            return;
+        }
+        const paymentData = await fetchPaymentData();
+        if (!paymentData || paymentData.errMessage !== 'Success') {
+            alert(t('Payment data is missing or failed!'));
+            return;
+        }
+
+        const checkoutId = paymentData.checkout;
+        console.log('checkoutId', checkoutId);
+
+        if ((window as any).GeideaCheckout) {
+            const GeideaCheckout = (window as any).GeideaCheckout;
+            const payment = new GeideaCheckout(onSuccess, onError, onCancel);
+            payment.startPayment(checkoutId);
+        } else {
+            setIsLoading(false);
+            Swal.fire({
+                icon: 'error',
+                title: t('Script Not Loaded'),
+                text: t('GeideaCheckout script is not loaded yet. Please try again later.'),
+            });
+        }
+    };
+
     return (
         <div style={{ height: '100%' }}>
             <div className="container" style={{ height: '100%' }}>
@@ -572,21 +724,36 @@ const ReservationItem: FunctionComponent<Props> = ({
                                                 : 'Print'
                                         )}
                                     </Button>
-                                    <Button
-                                        className="m-1"
-                                        size="small"
-                                        variant="contained"
-                                        onClick={handlePrintVoucher}
-                                        disabled={isVoucherLoading || PayMentStatus !== 'Paid'}
-                                    >
-                                        {isVoucherLoading ? (
-                                            <>
-                                                {t('Loading...')} <Loading />
-                                            </>
-                                        ) : (
-                                            t(PayMentStatus === 'Paid' ? 'Print Voucher' : '')
-                                        )}
-                                    </Button>
+                                    {PayMentStatus === 'Paid' && (
+                                        <Button
+                                            className="m-1"
+                                            size="small"
+                                            variant="contained"
+                                            onClick={handlePrintVoucher}
+                                            disabled={isVoucherLoading}
+                                        >
+                                            {isVoucherLoading ? (
+                                                <>
+                                                    {t('Loading...')} <Loading />
+                                                </>
+                                            ) : (
+                                                t('Print Voucher')
+                                            )}
+                                        </Button>
+                                    )}
+
+                                    {PayMentStatus === 'Unpaid' && (
+                                        <>
+                                            <Button
+                                                className="m-1"
+                                                size="small"
+                                                variant="contained"
+                                                onClick={startPayment}
+                                            >
+                                                {t('Pay Now')}
+                                            </Button>
+                                        </>
+                                    )}
                                 </Stack>
                             </div>
                         </div>

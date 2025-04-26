@@ -5,7 +5,7 @@ import Loading from '@/components/Loading/Loading';
 import Typography from '@mui/material/Typography';
 import { ClientStorage } from '@/hooks/useLocalStroge';
 import { useTranslation } from 'react-i18next';
-import ReservationItem from './Reservation';
+import ReservationItem from './ReservationItem';
 import { useGetPaidReservationQuery } from '@/store/Reservation/FetchPaidReservation';
 
 interface Reservation {
