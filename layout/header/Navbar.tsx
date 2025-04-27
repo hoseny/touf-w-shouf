@@ -50,13 +50,13 @@ const Navbar: FunctionComponent<Props> = props => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        setIsMounted(true); 
+        setIsMounted(true);
     }, []);
 
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
-        target: isMounted && window ? window() : undefined, 
+        target: isMounted && window ? window() : undefined,
     });
 
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -73,7 +73,7 @@ const Navbar: FunctionComponent<Props> = props => {
     };
 
     if (!isMounted) {
-        return null; 
+        return null;
     }
 
     if (isLoading) {
@@ -109,13 +109,13 @@ const Navbar: FunctionComponent<Props> = props => {
                                         sx={{ cursor: 'pointer' }}
                                     >
                                         <Image
-                                            src={data?.Logo?.[0]?.Logo_PATH || Logo.src} 
+                                            src={data?.Logo?.[0]?.Logo_PATH || Logo.src}
                                             alt="logo-left"
                                             priority
                                             width={150}
                                             height={50}
                                             onError={e => {
-                                                e.currentTarget.src = Logo.src; 
+                                                e.currentTarget.src = Logo.src;
                                             }}
                                         />
                                     </Box>
@@ -137,9 +137,7 @@ const Navbar: FunctionComponent<Props> = props => {
                                         <Link href={'/Suggestion'}>
                                             {t('Complaint and Suggestion')}
                                         </Link>
-                                        <Link href={'/wishlist'}>
-                                            {t('My WishList')}
-                                        </Link>
+                                        <Link href={'/wishlist'}>{t('My WishList')}</Link>
                                         {/* <Stack
                                             direction="row"
                                             alignItems="center"
@@ -253,18 +251,15 @@ const Navbar: FunctionComponent<Props> = props => {
                                 {t('Complaint and Suggestion')}
                             </Box>
 
-                            <IconButton
-                                sx={{
-                                    color: 'body.main',
-                                    alignSelf: 'flex-start',
-                                }}
+                            <Box
                                 onClick={() => {
                                     router.push('/wishlist');
                                     setDrawerOpen(false);
                                 }}
+                                sx={{ cursor: 'pointer' }}
                             >
-                                <ShoppingBagIcon />
-                            </IconButton>
+                                {t('My WishList')}
+                            </Box>
                         </Stack>
                     </Box>
                 </Drawer>

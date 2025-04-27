@@ -330,15 +330,11 @@ const Outings: FunctionComponent<Props> = () => {
                     variant="contained"
                     size="large"
                     fullWidth
-                    sx={{ borderRadius: '0 5px 5px 0', py: 1.9, boxShadow: 0 }}
+                    sx={{ borderRadius: '0 5px 5px 0', py: 1.9, boxShadow: 0, mt: 1 }}
                     onClick={handleSearch}
-                    disabled={loading} // تعطيل الزر أثناء التحميل
+                    disabled={loading}
                 >
-                    {loading ? (
-                        <Loading /> // عرض اللودينج
-                    ) : (
-                        t('Search') // النص الافتراضي
-                    )}
+                    {loading ? <Loading /> : t('Search')}
                 </Button>
             </Grid>
             {error && (

@@ -1,5 +1,4 @@
 import InsertInvitationRoundedIcon from '@mui/icons-material/InsertInvitationRounded';
-import UpdateIcon from '@mui/icons-material/Update';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -25,14 +24,8 @@ import { useAddExtraMutation } from '@/store/Reservation/AddExtraApi';
 import { useGetExtraQuery } from '@/store/Products/FetchExtraApi';
 import Loading from '../Loading/Loading';
 import { useAddReservationDetailsMutation } from '@/store/Reservation/AddReservationDetailsApi';
-import { store } from '@/store/store';
 import { toast, ToastContainer } from 'react-toastify';
 import Swal from 'sweetalert2';
-import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
-import { addToWishlist, removeFromWishlist, setWishlist } from '@/store/wishlistSlice';
-import { Product } from '@/data/products';
-
-// const names = ['18:00', '19:00', '20:00', '22:00', '15:00'];
 
 interface ProgramGroupItem {
     prog_grp_no: number;
@@ -58,7 +51,7 @@ interface Props {
 
 const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) => {
     const { t } = useTranslation();
-    const [personName, setPersonName] = useState<string[]>([]);
+    // const [personName, setPersonName] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [selectedPaxAval, setSelectedPaxAval] = useState<number | null>(null);
     const [groupNumber, setGroupNumber] = useState<number | null>(null);
@@ -119,12 +112,12 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
         setTripDate(selectedValue);
     };
 
-    const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(typeof value === 'string' ? value.split(',') : value);
-    };
+    // const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+    //     const {
+    //         target: { value },
+    //     } = event;
+    //     setPersonName(typeof value === 'string' ? value.split(',') : value);
+    // };
 
     const additionalServices = groupPriceData?.items.map((item: any) => ({
         title: item.pax_type,
@@ -136,9 +129,9 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
     const [addReservationDetails] = useAddReservationDetailsMutation();
     const [addExtra] = useAddExtraMutation();
     const { data: extra } = useGetExtraQuery({ code, programyear });
-    const extraData = extra?.items[0];
+    // const extraData = extra?.items[0];
 
-    const [errorMessage, setErrorMessage] = useState('');
+    // const [errorMessage, setErrorMessage] = useState('');
 
     const useCustomerData = () => {
         const isBrowser = typeof window !== 'undefined';
@@ -177,8 +170,7 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                 setLoading(false);
                 return;
             }
-    
-            // 1. إنشاء الحجز الأساسي
+
             const reservationResponse = await addReservation({
                 CUST_REF: customerData.CustCode,
                 TELEPHONE: customerData.TELEPHONE,
@@ -187,25 +179,22 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                 lang: languagecode,
                 PROG_YEAR: programyear,
             }).unwrap();
-    
+
             if (!reservationResponse) {
                 throw new Error('Failed to create reservation');
             }
-    
-            // حفظ بيانات الحجز
+
             sessionStorage.setItem('ref_no', reservationResponse.REF_NO);
             sessionStorage.setItem('Res_sp', reservationResponse.RESSP);
-    
-            // 2. معالجة الخدمات الأساسية (الغرف)
+
             for (const [serviceKey, count] of Object.entries(selectedServices)) {
                 if (count <= 0) continue;
-    
-                // إذا كانت خدمة أساسية (ليست إضافية)
+
                 if (!serviceKey.startsWith('extra_')) {
                     const paxData = groupPriceData.items.find(
                         (item: any) => item.pax_type === serviceKey
                     );
-    
+
                     if (paxData) {
                         await addReservationDetails({
                             REF_NO: reservationResponse.REF_NO,
@@ -220,17 +209,16 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                     }
                 }
             }
-    
-            // 3. معالجة الخدمات الإضافية
+
             if (extra?.items) {
                 for (const [serviceKey, count] of Object.entries(selectedServices)) {
                     if (count <= 0 || !serviceKey.startsWith('extra_')) continue;
-    
+
                     const serviceName = serviceKey.replace('extra_', '');
                     const extraService = extra.items.find(
                         (item: ExtraService) => item.ext_srv === serviceName
                     );
-    
+
                     if (extraService) {
                         await addExtra({
                             code: code,
@@ -246,7 +234,7 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                     }
                 }
             }
-    
+
             handleNext();
         } catch (error) {
             console.error('Error during payment process:', error);
@@ -322,43 +310,6 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                                 </Select>
                             </FormControl>
                         </Grid>
-                        {/* <Grid item xs={2.5}>
-                            <FormControl sx={{ mt: 1, width: '100%' }} variant="outlined">
-                                <Select
-                                    id="Trip type"
-                                    sx={{ backgroundColor: 'body.light' }}
-                                    displayEmpty
-                                    input={<OutlinedInput />}
-                                    fullWidth
-                                    value={personName}
-                                    onChange={handleChange}
-                                    placeholder="Trip type"
-                                    renderValue={(selected: any) => {
-                                        if (selected.length === 0) {
-                                            return <Box sx={{ color: '#B7B7B7' }}>Time</Box>;
-                                        }
-                                        return selected.join(', ');
-                                    }}
-                                    startAdornment={
-                                        <InputAdornment
-                                            position="start"
-                                            sx={{ color: 'main.lightGray' }}
-                                        >
-                                            <UpdateIcon />
-                                        </InputAdornment>
-                                    }
-                                >
-                                    <MenuItem disabled value="">
-                                        <em>Time</em>
-                                    </MenuItem>
-                                    {names.map(name => (
-                                        <MenuItem key={name} value={name}>
-                                            {name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid> */}
                     </Grid>
 
                     <AdditionalServices
@@ -395,7 +346,9 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                             variant="subtitle1"
                             sx={{ color: 'secondary.main', ml: '-5px' }}
                         >
-                            <Link href={'/Terms'}>{t('Read Terms and conditions')}</Link>
+                            <Link href={`/Terms/${code}/${programyear}`}>
+                                {t('Read Terms and conditions')}
+                            </Link>
                         </Typography>
                     </Stack>
 
@@ -415,16 +368,11 @@ const PassengerData: FunctionComponent<Props> = ({ handleNext, setTripDate }) =>
                             </Button>
                         </Grid>
 
-                        {errorMessage && (
+                        {/* {errorMessage && (
                             <Typography variant="subtitle1" color="error" sx={{ mt: 2 }}>
                                 {errorMessage}
                             </Typography>
-                        )}
-                        {/* <Grid item xs={3}>
-                            <Button variant="outlined" sx={{ mr: 1 }} fullWidth size="large">
-                                {t('Add to my shopping cart')}
-                            </Button>
-                        </Grid> */}
+                        )} */}
                     </Grid>
                 </>
             )}

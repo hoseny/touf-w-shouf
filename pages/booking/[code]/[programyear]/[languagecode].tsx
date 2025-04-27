@@ -57,7 +57,7 @@ const Book: NextPage = () => {
     return (
         <div>
             <Head>
-                <title>Booking</title>
+                <title>{t('Booking')}</title>
             </Head>
             {isLoading && <Loading />}
 

@@ -21,7 +21,8 @@ const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, TourTy
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                spacing={7}
+                flexWrap="wrap"
+                spacing={5}
                 sx={{ my: 3, p: 4 }}
             >
                 <Stack
@@ -29,7 +30,7 @@ const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, TourTy
                     justifyContent="start"
                     alignItems="center"
                     spacing={1}
-                    sx={{ color: 'gray.main' }}
+                    sx={{ color: 'gray.main', my: 1 }}
                 >
                     <PlaceIcon />
                     <Stack direction="row" spacing={0.5}>
@@ -44,7 +45,7 @@ const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, TourTy
                     justifyContent="start"
                     alignItems="center"
                     spacing={1}
-                    sx={{ color: 'gray.main' }}
+                    sx={{ color: 'gray.main', my: 1 }}
                 >
                     {/* <AttachMoneyIcon /> */}
                     <Stack direction="row" spacing={0.5}>
@@ -63,7 +64,7 @@ const LocationAndPriceAndTime: FunctionComponent<Props> = ({ time, price, TourTy
                     justifyContent="start"
                     alignItems="center"
                     spacing={1}
-                    sx={{ color: 'gray.main' }}
+                    sx={{ color: 'gray.main', my: 1 }}
                 >
                     <UpdateIcon />
                     <Stack direction="row" spacing={0.5}>

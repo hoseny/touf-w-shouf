@@ -26,6 +26,7 @@ const AccordionData: FunctionComponent<Props> = ({ data }) => {
                     sx={{
                         boxShadow: 1,
                         mt: 2,
+                        width: '100%',
                         borderRadius: 2,
                         '&:before': {
                             content: 'unset',

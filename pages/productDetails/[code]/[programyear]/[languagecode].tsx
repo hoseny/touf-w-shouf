@@ -38,7 +38,6 @@ const Index: NextPage<Props> = () => {
 
     const { t } = useTranslation();
     const router = useRouter();
-    // const { code, programyear, languagecode } = router.query;
 
     // fetch details
     const getQueryParam = (param: string | string[] | undefined): string => {
@@ -163,7 +162,7 @@ const Index: NextPage<Props> = () => {
                     )}
 
                     <Grid container spacing={3}>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} lg={3}>
                             <Accordion
                                 data={[
                                     {
@@ -196,7 +195,7 @@ const Index: NextPage<Props> = () => {
                                 ]}
                             />
                         </Grid>
-                        <Grid item xs={7}>
+                        <Grid sx={{ margin: 'auto' }} item xs={12} lg={8}>
                             <DetailsTabs id={`${code}`} productData={productData} />
                         </Grid>
                     </Grid>
