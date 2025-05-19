@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import CircularProgress from '@mui/material/CircularProgress';
 import Loading from '@/components/Loading/Loading';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 interface GeideaData {
     responseCode: string;
     responseMessage: string;
@@ -162,8 +163,9 @@ const Payment = () => {
             return;
         }
         const paymentData = await fetchPaymentData();
-        if (!paymentData || paymentData.errMessage !== 'Success') {
-            alert(t('Payment data is missing or failed!'));
+        if (!paymentData || !paymentData.checkout) {
+            setIsLoading(false);
+            toast.error(paymentData?.errMessage || 'Payment data is missing or failed!');
             return;
         }
 
