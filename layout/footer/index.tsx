@@ -14,11 +14,30 @@ import FacebookSharpIcon from '@mui/icons-material/FacebookSharp';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
+import jsPDF from 'jspdf';
 
 interface Props {}
 
 const Index: FunctionComponent<Props> = () => {
     const { t } = useTranslation();
+    const downloadTerms = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text('Misr Travel Terms and Conditions', 20, 20);
+
+        doc.setFontSize(12);
+        const termsText = `
+      Misr Travel doesn’t charge a cancellation for tours and excursions cancelled for force majeure or reasons beyond control. 
+      You can cancel up to 24 hours in advance for a full refund minus any administrative fees. 
+      Misr Travel doesn’t charge a cancellation for tours and excursions cancelled for force majeure or reasons beyond control. 
+      You can cancel up to 24 hours in advance for a full refund minus any administrative fees.
+    `;
+        const splitText = doc.splitTextToSize(termsText, 170);
+        doc.text(splitText, 20, 30);
+
+        doc.save('Misr_Travel_Terms_and_Conditions.pdf');
+    };
 
     return (
         <Box
@@ -47,6 +66,9 @@ const Index: FunctionComponent<Props> = () => {
                             </Box>
                             <Box sx={{ mb: 2 }}>
                                 <Link href={'/wishlist'}>{t('My WishList')}</Link>{' '}
+                            </Box>
+                            <Box sx={{ mb: 2, cursor: 'pointer' }} onClick={downloadTerms}>
+                                {t('Terms and conditions')}
                             </Box>
                         </Grid>
 

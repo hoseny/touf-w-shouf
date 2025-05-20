@@ -19,7 +19,8 @@ import Drawer from '@mui/material/Drawer';
 import { useGetLogoQuery } from '@/store/Home/LogoSlice';
 import { ClientStorage } from '@/hooks/useLocalStroge';
 import Loading from '@/components/Loading/Loading';
-
+import Button from '@mui/material/Button';
+import jsPDF from 'jspdf';
 interface Props {
     window?: () => Window;
 }
@@ -46,6 +47,25 @@ const Navbar: FunctionComponent<Props> = props => {
     const { data, isLoading, isError } = useGetLogoQuery(queryParamsInlude, {
         skip: language !== 'en',
     });
+
+    const downloadTerms = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text('Misr Travel Terms and Conditions', 20, 20);
+
+        doc.setFontSize(12);
+        const termsText = `
+      Misr Travel doesn’t charge a cancellation for tours and excursions cancelled for force majeure or reasons beyond control. 
+      You can cancel up to 24 hours in advance for a full refund minus any administrative fees. 
+      Misr Travel doesn’t charge a cancellation for tours and excursions cancelled for force majeure or reasons beyond control. 
+      You can cancel up to 24 hours in advance for a full refund minus any administrative fees.
+    `;
+        const splitText = doc.splitTextToSize(termsText, 170);
+        doc.text(splitText, 20, 30);
+
+        doc.save('Misr_Travel_Terms_and_Conditions.pdf');
+    };
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -101,9 +121,9 @@ const Navbar: FunctionComponent<Props> = props => {
                                 spacing={3}
                                 alignItems="center"
                                 justifyContent="space-between"
-                                padding="10px"
+                                padding="10px 0"
                             >
-                                <Grid item xs={5} sm={2} sx={{ textAlign: 'left' }}>
+                                <Grid item xs={5} sm={1} sx={{ textAlign: 'left' }}>
                                     <Box
                                         onClick={() => router.push('/')}
                                         sx={{ cursor: 'pointer' }}
@@ -112,7 +132,7 @@ const Navbar: FunctionComponent<Props> = props => {
                                             src={data?.Logo?.[0]?.Logo_PATH || Logo.src}
                                             alt="logo-left"
                                             priority
-                                            width={150}
+                                            width={'100%'}
                                             height={50}
                                             onError={e => {
                                                 e.currentTarget.src = Logo.src;
@@ -137,20 +157,10 @@ const Navbar: FunctionComponent<Props> = props => {
                                         <Link href={'/Suggestion'}>
                                             {t('Complaint and Suggestion')}
                                         </Link>
+                                        <Box onClick={downloadTerms} sx={{ cursor: 'pointer' }}>
+                                            {t('Terms')}
+                                        </Box>
                                         <Link href={'/wishlist'}>{t('My WishList')}</Link>
-                                        {/* <Stack
-                                            direction="row"
-                                            alignItems="center"
-                                            spacing={1.5}
-                                            justifyContent="end"
-                                        >
-                                            <IconButton
-                                                sx={{ color: 'body.main' }}
-                                                onClick={() => router.push('/wishlist')}
-                                            >
-                                                <ShoppingBagIcon />
-                                            </IconButton>
-                                        </Stack> */}
                                     </Stack>
 
                                     <IconButton
@@ -181,7 +191,7 @@ const Navbar: FunctionComponent<Props> = props => {
                                             src={Logo}
                                             alt="logo-right"
                                             priority
-                                            width={150}
+                                            width={120}
                                             height={50}
                                         />
                                     </Box>
@@ -251,6 +261,15 @@ const Navbar: FunctionComponent<Props> = props => {
                                 {t('Complaint and Suggestion')}
                             </Box>
 
+                            <Box
+                                onClick={() => {
+                                    downloadTerms();
+                                    setDrawerOpen(false);
+                                }}
+                                sx={{ cursor: 'pointer' }}
+                            >
+                                {t('Terms')}
+                            </Box>
                             <Box
                                 onClick={() => {
                                     router.push('/wishlist');

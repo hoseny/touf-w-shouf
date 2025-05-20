@@ -6,11 +6,11 @@ import Image from 'next/image';
 import Logo4 from '@/assets/images/partner/logo-1.jpg';
 import Logo3 from '@/assets/images/partner/logo-2.jpg';
 import Logo2 from '@/assets/images/partner/logo-3.jpg';
-import Logo1 from '@/assets/images/partner/logo-4.jpeg';
+import Logo5 from '@/assets/images/partner/ahly-bank.png';
 import { useTranslation } from 'react-i18next';
 
 interface Props {}
-const LogosArray = [Logo1, Logo2, Logo3, Logo4];
+const LogosArray = [Logo5, Logo2, Logo3, Logo4];
 const Partners: FunctionComponent<Props> = () => {
     const { t } = useTranslation();
 
