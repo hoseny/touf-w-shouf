@@ -39,7 +39,7 @@ export const AddExtraApi = createApi({
     endpoints: builder => ({
         addExtra: builder.mutation({
             query: ({ code, year, ...values }) => ({
-                url: `/ExtraProgram/${code}/${year}`,
+                url: `/ExtraProgramming/${code}/${year}`,
                 method: 'POST',
                 body: values,
                 headers: {

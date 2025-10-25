@@ -9,7 +9,7 @@ export const RegisterApi = createApi({
     endpoints: builder => ({
         addUser: builder.mutation({
             query: values => ({
-                url: '/client/',
+                url: '/clients/',
                 method: 'POST',
                 body: values,
                 headers: {

@@ -9,7 +9,7 @@ export const AddReservationApi = createApi({
     endpoints: builder => ({
         addReservation: builder.mutation({
             query: values => ({
-                url: '/Reservation/',
+                url: '/Reservations/',
                 method: 'POST',
                 body: values,
                 headers: {

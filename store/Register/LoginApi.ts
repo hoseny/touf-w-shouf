@@ -7,7 +7,7 @@ export const LoginApi = createApi({
     }),
     endpoints: builder => ({
         loginUser: builder.query({
-            query: ({ Email, Pword }) => `ClientLogin/${Email}/${Pword}`,
+            query: ({ Email, Pword }) => `ClientsLogin/${Email}/${Pword}`,
         }),
     }),
 });

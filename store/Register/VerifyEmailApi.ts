@@ -8,7 +8,7 @@ export const VerifyEmailApi = createApi({
     endpoints: builder => ({
         verifyEmail: builder.mutation<any, { OTP: number; p_Mail: string; TEL: string }>({
             query: ({ OTP, p_Mail, TEL }) => ({
-                url: `validation/${OTP}`,
+                url: `validations/${OTP}`,
                 method: 'POST',
                 body: { p_Mail, TEL },
             }),
