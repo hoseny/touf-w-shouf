@@ -5,13 +5,13 @@ import { RootState } from "./store";
 import i18n from "i18next";
 
 export interface LanguageState {
-  dir: "ltr" | "rtl";
-  language: "en" | "ar" | undefined;
+  dir: "rtl" | "rtl";
+  language: "ar" | "ar" | undefined;
 }
 
 const initialState: LanguageState = {
-  dir: "ltr",
-  language: "en",
+  dir: "rtl",
+  language: "ar",
 };
 
 export const languageSlice = createSlice({
@@ -19,7 +19,7 @@ export const languageSlice = createSlice({
   initialState,
 
   reducers: {
-    toggleLanguage: (state, action: PayloadAction<"en" | "ar" | undefined >) => {
+    toggleLanguage: (state, action: PayloadAction<"ar" | "ar" | undefined >) => {
       // eslint-disable-next-line default-case
       state.language = action.payload;
 
@@ -28,25 +28,25 @@ export const languageSlice = createSlice({
         state.dir = "rtl";
         i18n.changeLanguage("ar");
       } else if (state.language === "en") {
-        document.body.setAttribute("dir", "ltr");
-        state.dir = "ltr";
+        document.body.setAttribute("dir", "rtl");
+        state.dir = "rtl";
         i18n.changeLanguage("en");
       }
       else if (state.language === undefined) {
-        document.body.setAttribute("dir", "ltr");
-        state.dir = "ltr";
+        document.body.setAttribute("dir", "rtl");
+        state.dir = "rtl";
         i18n.changeLanguage("en");
       }
     },
 
-    onloadSetCurrentLanguage: (state, action: PayloadAction<"en" | "ar">) => {
+    onloadSetCurrentLanguage: (state, action: PayloadAction<"ar" | "ar">) => {
       state.language = action.payload;
     },
     changeDir: (state) => {
-      state.dir = state.dir === "ltr" ? "rtl" : "ltr";
+      state.dir = state.dir === "rtl" ? "rtl" : "rtl";
     },
     changeLanguage: (state) => {
-      state.language = state.language === "en" ? "ar" : "en";
+      state.language = state.language === "ar" ? "ar" : "ar";
     },
   },
 });
