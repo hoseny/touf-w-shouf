@@ -7,7 +7,7 @@ export const FetchVoucher = createApi({
     }),
     endpoints: builder => ({
         getVoucher: builder.query({
-            query: ReservationNo => `voucher/v1?ResNO=${ReservationNo}`,
+            query: ReservationNo => `voucher/v5?ResNO=${ReservationNo}`,
         }),
     }),
 });

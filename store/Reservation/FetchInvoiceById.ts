@@ -7,7 +7,7 @@ export const FetchInvoiceById = createApi({
     }),
     endpoints: builder => ({
         getInvoice: builder.query({
-            query: ({ id }) => `/invoice/v1/inv/${id}`,
+            query: ({ id }) => `/invoice/v5/inv/${id}`,
         }),
     }),
 });

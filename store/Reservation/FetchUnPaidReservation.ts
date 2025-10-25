@@ -7,7 +7,7 @@ export const FetchUnPaidReservation = createApi({
     }),
     endpoints: builder => ({
         getUnPaidReservation: builder.query({
-            query: (id) => `getReservation?CustomerID=${id}`,
+            query: (id) => `getReservations?CustomerID=${id}`,
         }),
     }),
 });

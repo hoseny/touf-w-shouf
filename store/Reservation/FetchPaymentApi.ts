@@ -7,7 +7,7 @@ export const FetchPaymentApi = createApi({
     }),
     endpoints: builder => ({
         getPayment: builder.query({
-            query: ({ ref, sp }) => `/payment/${ref}/${sp}`,
+            query: ({ ref, sp }) => `/all-payment/${ref}/${sp}`,
         }),
     }),
 });
