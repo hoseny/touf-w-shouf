@@ -10,7 +10,7 @@ export const FetchDayUseEnApi = createApi({
         getDayUseEn: builder.query<{
             item: any; DayUse: Product[] 
 }, void>({
-            query: () => '/programENG',
+            query: () => '/',
         }),
     }),
 });

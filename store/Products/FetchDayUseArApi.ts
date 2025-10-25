@@ -8,7 +8,7 @@ export const FetchDayUseArApi = createApi({
     }),
     endpoints: builder => ({
         getDayUseAr: builder.query<{ DayUse: Product[] }, void>({
-            query: () => '/ProgramArabic',
+            query: () => '/',
         }),
     }),
 });

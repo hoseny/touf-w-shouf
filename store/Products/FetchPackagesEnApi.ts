@@ -8,7 +8,7 @@ export const FetchPackagesEnApi = createApi({
     }),
     endpoints: builder => ({
         getPackageEn: builder.query<{ packages: Product[] }, void>({
-            query: () => '/Packages',
+            query: () => '/Packkages',
         }),
     }),
 });

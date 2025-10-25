@@ -7,7 +7,7 @@ export const FetchImagesApi = createApi({
     }),
     endpoints: builder => ({
         getImg: builder.query({
-            query: ({ code, programyear }) => `/Images/${code}/${programyear}`,
+            query: ({ code, programyear }) => `/${code}/${programyear}`,
         }),
     }),
 });

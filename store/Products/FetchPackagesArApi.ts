@@ -8,7 +8,7 @@ export const FetchPackagesArApi = createApi({
     }),
     endpoints: builder => ({
         getPackageAr: builder.query<{ Packages: Product[] }, void>({
-            query: () => '/PackageArabic',
+            query: () => '/PackageArabichh',
         }),
     }),
 });

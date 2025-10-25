@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const FetchCityArApi = createApi({
     reducerPath: 'CityArData',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://app.misrtravelco.net:4444/ords/invoice/ProgAR/',
+        baseUrl: 'https://test.com/ords/invoice/ProgAR/',
     }),
     endpoints: builder => ({
         getCityAr: builder.query({

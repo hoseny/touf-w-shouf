@@ -7,7 +7,7 @@ export const FetchProgramGroupsApi = createApi({
     }),
     endpoints: builder => ({
         getProgramGroup: builder.query({
-            query: ({ code, programyear }) => `/ProgramGroups/${code}/${programyear}`,
+            query: ({ code, programyear }) => `/ProggramGroups/${code}/${programyear}`,
         }),
     }),
 });
